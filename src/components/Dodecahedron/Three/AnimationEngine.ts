@@ -173,7 +173,7 @@ export class AnimationEngine {
       await this.getGeometry(),
       await this.getMaterial(textureFile, color),
     );
-    mesh.position.set(0, 0, 0);
+    mesh.position.set(0.8, 0, 0);
 
     return mesh;
   }

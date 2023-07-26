@@ -26,6 +26,11 @@ function App() {
           <ThemeToggle />
         </div>
 
+        <Dodecahedron
+          id="dodecahedron-tailwind-canvas"
+          textureFile="/logo_orange.png"
+        />
+
         <div className="flex flex-row h-full justify-between md:p-16 ">
           <div className="flex flex-col gap-4 md:gap-8 w-full md:w-1/2 lg:w-[700px]  ">
             <div className="flex flex-row gap-4 items-center">
@@ -47,32 +52,6 @@ function App() {
               eye-catching designs ourselves.
             </p>
             <Button className="w-full md:w-1/2 lg:w-1/3">Contact me</Button>
-          </div>
-          <div className="flex flex-row justify-between">
-            {/*<Dodecahedron*/}
-            {/*  id="dodecahedron-JS-canvas"*/}
-            {/*  textureFile="/logo_yellow.png"*/}
-            {/*  // color={0xf6ae2d}*/}
-            {/*  className="w-[100px] h-[100px]"*/}
-            {/*/>*/}
-            {/*<Dodecahedron*/}
-            {/*  id="dodecahedron-React-canvas"*/}
-            {/*  textureFile="/logo_red.png"*/}
-            {/*  // color={0xff6700}*/}
-            {/*  className="w-[100px] h-[100px]"*/}
-            {/*/>*/}
-            {/*<Dodecahedron*/}
-            {/*  id="dodecahedron-three-canvas"*/}
-            {/*  textureFile="/logo_blue.png"*/}
-            {/*  // color={0x004e98}*/}
-            {/*  className="w-[100px] h-[100px]"*/}
-            {/*/>*/}
-            <Dodecahedron
-              id="dodecahedron-tailwind-canvas"
-              textureFile="/logo_orange.png"
-              // color={0xf011627}
-              className="w-screen h-screen"
-            />
           </div>
         </div>
       </div>

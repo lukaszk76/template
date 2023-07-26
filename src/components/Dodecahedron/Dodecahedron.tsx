@@ -16,7 +16,7 @@ export const Dodecahedron = memo(
     return (
       <canvas
         id={id}
-        className={`hover:scale-[1.2] transition ease-in-out duration-300  ${className}`}
+        className={`h-screen w-screen fixed z-[-1]  ${className}`}
         style={{ cursor: "pointer" }}
       ></canvas>
     );
