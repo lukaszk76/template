@@ -71,7 +71,7 @@ function App() {
               id="dodecahedron-tailwind-canvas"
               textureFile="/logo_orange.png"
               // color={0xf011627}
-              className="w-[400px] h-[400px]"
+              className="w-screen h-screen"
             />
           </div>
         </div>
