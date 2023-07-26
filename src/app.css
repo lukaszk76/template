@@ -1,0 +1,11 @@
+.masked {
+  mask-image: radial-gradient(circle at 0% 0%, transparent 50px, black 100px);
+  -webkit-mask-image: radial-gradient(circle at 0% 0%, transparent 50%, black 100%);
+}
+
+.masked-right {
+  mask-image: radial-gradient(circle at 100% 100%, transparent 50px, black 100px);
+  mask-size: cover;
+  -webkit-mask-image: radial-gradient(circle at 100% 100%, transparent 40%, black 60%);
+  -webkit-mask-size: cover;
+}
