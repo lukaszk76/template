@@ -1,12 +1,9 @@
 import * as THREE from "three";
 import {
-  DirectionalLight,
   Mesh,
   MeshPhysicalMaterial,
-  Object3D,
   PerspectiveCamera,
   OrthographicCamera,
-  Raycaster,
   Scene,
   WebGLRenderer,
   DataTexture,
@@ -21,42 +18,32 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { FlakesTexture } from "three/examples/jsm/textures/FlakesTexture";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-
-interface MouseI {
-  x: number;
-  y: number;
-  prevX: number;
-  prevY: number;
-  speedX: number;
-  speedY: number;
-}
+import VirtualScroll, { VirtualScrollEvent } from "virtual-scroll";
+import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 
 export class AnimationEngine {
+  private shouldAnimate = true;
   private readonly canvas: Element | null;
   private readonly scene: Scene;
   private renderer: WebGLRenderer | undefined;
   private camera: PerspectiveCamera | OrthographicCamera | undefined;
   private composer: EffectComposer | undefined;
-  private raycaster: Raycaster;
   private mesh:
     | Mesh<BufferGeometry<NormalBufferAttributes>, MeshPhysicalMaterial>
     | undefined;
   private geometry: BufferGeometry<NormalBufferAttributes> | undefined;
-  private mouse: MouseI;
-  private previouslySelectedObject: Object3D<THREE.Event> | null;
-  private light: DirectionalLight | undefined;
   private envMap: DataTexture | undefined;
+  private virtualScroll: VirtualScroll;
   constructor(id: string, textureFile?: string, color?: number) {
     this.canvas = document.getElementById(id);
     this.scene = new THREE.Scene();
     this.getRenderer();
     this.getCamera();
     this.getComposer();
-    this.getLight();
-    this.raycaster = new THREE.Raycaster();
-    this.previouslySelectedObject = null;
+    this.virtualScroll = new VirtualScroll();
+    this.virtualScroll.on(this.handleScroll);
 
     if (this.camera && this.canvas) {
       const controls = new OrbitControls(
@@ -66,15 +53,6 @@ export class AnimationEngine {
       controls.enableDamping = false;
       controls.enableZoom = false;
     }
-
-    this.mouse = {
-      x: 0,
-      y: 0,
-      prevX: 0,
-      prevY: 0,
-      speedX: 0,
-      speedY: 0,
-    };
 
     this.getEnvMap().then((envMap) => {
       this.envMap = envMap;
@@ -87,31 +65,37 @@ export class AnimationEngine {
         }
         this.scene.add(this.camera);
 
-        // if (!this.light) {
-        //   throw new Error("light is not defined");
-        // }
-        // this.scene.add(this.light);
-
         window.addEventListener("resize", () => {
           this.onResize();
         });
 
         this.onResize();
 
-        window.addEventListener("mousemove", (e) => {
-          this.onMouseMove(e);
-        });
-
         this.animate();
       });
     });
   }
 
+  private handleScroll = (e: VirtualScrollEvent) => {
+    if (!this.mesh || e.y <= 0) return;
+
+    this.shouldAnimate = e.y <= 100;
+
+    this.mesh.position.x -= e.deltaY * (this.mesh.position.x / 1000);
+    this.mesh.rotation.x -= e.deltaY * (this.mesh.rotation.x / 1000);
+    this.mesh.rotation.y -= e.deltaY * (this.mesh.rotation.y / 1000);
+
+    this.mesh.scale.x += e.deltaY * (this.mesh.scale.x / 1000);
+    this.mesh.scale.y += e.deltaY * (this.mesh.scale.y / 1000);
+    this.mesh.scale.z += e.deltaY * (this.mesh.scale.z / 1000);
+  };
+
   private getNormalMap() {
-    const texture = new THREE.CanvasTexture(new FlakesTexture());
+    // const texture = new THREE.CanvasTexture(new FlakesTexture());
+    const texture = new THREE.TextureLoader().load("/normal_map.png");
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(10, 6);
+    texture.repeat.set(8, 8);
     return texture;
   }
 
@@ -142,7 +126,7 @@ export class AnimationEngine {
     );
     camera.position.x = 0;
     camera.position.y = 0;
-    camera.position.z = 1.2;
+    camera.position.z = 2;
     this.camera = camera;
   }
 
@@ -162,8 +146,9 @@ export class AnimationEngine {
     const composer = new EffectComposer(this.renderer);
     composer.addPass(new RenderPass(this.scene, this.camera));
 
-    // const customShader = new ShaderPass(CustomShader);
-    // composer.addPass(customShader);
+    const RGBPass = new ShaderPass(RGBShiftShader);
+    RGBPass.uniforms["amount"].value = 0.0;
+    composer.addPass(RGBPass);
 
     this.composer = composer;
   }
@@ -173,7 +158,7 @@ export class AnimationEngine {
       await this.getGeometry(),
       await this.getMaterial(textureFile, color),
     );
-    mesh.position.set(0.8, 0, 0);
+    mesh.position.set(1.5, 0, 0);
 
     return mesh;
   }
@@ -183,14 +168,15 @@ export class AnimationEngine {
 
     this.composer.render();
 
-    this.mesh.rotateY(0.005 * (Math.random() - 0.2));
-    this.mesh.rotateX(0.002 * Math.random());
+    if (this.shouldAnimate) {
+      this.mesh.rotateY(0.003);
+      this.mesh.rotateX(0.002);
+    }
 
     window.requestAnimationFrame(this.animate.bind(this));
   }
 
   private async getGeometry() {
-    // this.geometry = new THREE.DodecahedronGeometry(0.5, 0);
     const loader = new GLTFLoader();
     const model = await loader.loadAsync("/hexagon.glb");
 
@@ -216,8 +202,8 @@ export class AnimationEngine {
       color: color ?? 0xffffff,
       roughness: 0.3,
       metalness: 0.2,
-      transmission: 0.8,
-      reflectivity: 0.3,
+      transmission: 0.0,
+      reflectivity: 0.2,
       thickness: 0.1,
       clearcoat: 0.1,
       clearcoatRoughness: 0.3,
@@ -225,7 +211,8 @@ export class AnimationEngine {
       envMap: this.envMap,
       envMapIntensity: 3,
       normalMap: this.getNormalMap(),
-      normalScale: new THREE.Vector2(0.2, 0.2),
+      normalScale: new THREE.Vector2(0.1, 0.1),
+      normalMapType: 0,
     });
   }
 
@@ -234,12 +221,6 @@ export class AnimationEngine {
       return new THREE.TextureLoader().load(textureFile, (texture) => texture);
     }
     return undefined;
-  }
-
-  private getLight() {
-    const light = new THREE.DirectionalLight(0xffffff, 5);
-    light.position.set(3, 1, 5);
-    this.light = light;
   }
 
   private getResolution() {
@@ -271,42 +252,5 @@ export class AnimationEngine {
       throw new Error("composer is not defined");
     }
     this.composer.setSize(resolution.x, resolution.y);
-  }
-  onMouseMove(e: MouseEvent) {
-    this.mouse.prevX = this.mouse.x;
-    this.mouse.prevY = this.mouse.y;
-    this.mouse.x = e.clientX / window.innerWidth;
-    this.mouse.y = 1 - e.clientY / window.innerHeight;
-    this.mouse.speedX = this.mouse.x - this.mouse.prevX;
-    this.mouse.speedY = this.mouse.y - this.mouse.prevY;
-  }
-
-  checkIntersection() {
-    if (!this.camera) {
-      return;
-    }
-
-    this.raycaster.setFromCamera(
-      new THREE.Vector2(this.mouse.x, this.mouse.y),
-      this.camera,
-    );
-
-    const intersects = this.raycaster.intersectObject(this.scene, true);
-
-    if (intersects.length > 0) {
-      const selectedObject = intersects[0].object;
-      if (
-        !this.previouslySelectedObject ||
-        selectedObject.name !== this.previouslySelectedObject.name
-      ) {
-        this.previouslySelectedObject = selectedObject;
-        console.log(selectedObject);
-      }
-    } else {
-      if (this.previouslySelectedObject) {
-        console.log(this.previouslySelectedObject);
-        this.previouslySelectedObject = null;
-      }
-    }
   }
 }

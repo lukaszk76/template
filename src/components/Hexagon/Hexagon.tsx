@@ -7,20 +7,20 @@ export interface DodecahedronProps {
   color?: number;
   className?: string;
 }
-export const Dodecahedron = memo(
+export const Hexagon = memo(
   ({ id, textureFile, color, className }: DodecahedronProps) => {
     useLayoutEffect(() => {
       new AnimationEngine(id, textureFile, color);
-    }, [id]);
+    }, [id, color]);
 
     return (
       <canvas
         id={id}
-        className={`h-screen w-screen fixed z-[-1]  ${className}`}
-        style={{ cursor: "pointer" }}
+        className={`h-screen w-screen fixed z-[1]  ${className}`}
+        style={{ pointerEvents: "none" }}
       ></canvas>
     );
   },
 );
 
-Dodecahedron.displayName = "Dodecahedron";
+Hexagon.displayName = "Hexagon";
