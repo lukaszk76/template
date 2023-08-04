@@ -8,7 +8,7 @@ import vertexSimulationShader from "./shaders/vertexSimulation.glsl";
 export default class Sketch {
   constructor(options) {
     this.time = 0;
-    this.size = 64;
+    this.size = 255;
     this.count = this.size * this.size;
     this.container = options.dom;
     this.scene = new THREE.Scene();

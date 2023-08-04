@@ -44,11 +44,11 @@ export class AnimationEngine {
   private readonly distortionSize: number;
   private dataTexture: DataTexture | undefined;
   constructor(id: string, textureFile: string, imageRatio: number) {
-    this.size = 96;
-    this.fadeFactor = 0.98;
+    this.size = 255;
+    this.fadeFactor = 0.99;
     this.initialOffsetFactor = 20;
-    this.mouseOffsetFactor = 60;
-    this.distortionSize = 15;
+    this.mouseOffsetFactor = 50;
+    this.distortionSize = 25;
     this.canvas = document.getElementById(id);
     this.scene = new THREE.Scene();
     this.getRenderer();
@@ -245,7 +245,7 @@ export class AnimationEngine {
         uDataTexture: {
           value: this.dataTexture,
         },
-        resolution: { value: new THREE.Vector4() },
+        resolution: { value: this.getResolution() },
         progress: { value: 1 },
       },
       vertexShader: vertex,

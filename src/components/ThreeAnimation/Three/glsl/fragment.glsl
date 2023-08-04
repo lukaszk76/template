@@ -10,7 +10,10 @@ void main() {
     if (textureAspect < screenAspect) {
         multiplier = vec2(1., textureAspect/screenAspect);
     }
-    vec2 newUV = (vUv - vec2(0.5)) * multiplier + vec2(0.5);
+    vec2 newUV = (vUv - vec2(0.5)) * multiplier + vec2(0.5) ;
+
+    newUV *= vec2(1.3);
+    newUV -= vec2(0.3);
 
     vec4 offset = texture2D(uDataTexture, vUv);
 

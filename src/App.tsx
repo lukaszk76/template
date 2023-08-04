@@ -1,5 +1,4 @@
 import { ThreeAnimation } from "@/components/ThreeAnimation/ThreeAnimation";
-import { useTheme } from "next-themes";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import "../app/globals.css";
@@ -7,16 +6,15 @@ import "./app.css";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Points } from "@/components/Points/Points";
 import React from "react";
-import { Hexagon } from "@/components/Hexagon/Hexagon";
+import { Logos } from "@/components/Logos/Logos";
 
 function App() {
-  const { theme } = useTheme();
   return (
     <div className="h-screen">
       <ThreeAnimation
         id="main-webgl-background"
-        src="/hexagons1.png"
-        imageRatio={2 / 3}
+        src="/hexagons_dark.png"
+        imageRatio={16 / 9}
         className="z-[-1] fixed top-0 left-0 w-screen h-screen masked"
       />
 
@@ -26,12 +24,12 @@ function App() {
         <ThemeToggle />
       </div>
 
-      <Hexagon
-        id="dodecahedron-tailwind-canvas"
-        color={theme === "light" ? 0x59869c : 0x386a85}
-      />
+      {/*<Hexagon*/}
+      {/*  id="dodecahedron-tailwind-canvas"*/}
+      {/*  color={theme === "light" ? 0x59869c : 0x386a85}*/}
+      {/*/>*/}
 
-      <div className="flex flex-row h-full justify-between md:p-16 ">
+      <div className="flex flex-col h-screen justify-evenly md:p-16 ">
         <div className="flex flex-col gap-4 md:gap-8 w-full md:w-1/2 lg:w-[700px]  ">
           <div className="flex flex-row gap-4 items-center">
             <Icons.logo className="w-16" />
@@ -52,6 +50,7 @@ function App() {
           </p>
           <Button className="w-full md:w-1/2 lg:w-1/3">Contact me</Button>
         </div>
+        <Logos />
       </div>
     </div>
   );
