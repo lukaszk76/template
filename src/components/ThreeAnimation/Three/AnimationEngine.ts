@@ -15,7 +15,6 @@ import vertex from "./glsl/vertex.glsl";
 import fragment from "./glsl/fragment.glsl";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 
 interface MouseI {
   x: number;
@@ -43,18 +42,23 @@ export class AnimationEngine {
   private readonly mouseOffsetFactor: number;
   private readonly distortionSize: number;
   private dataTexture: DataTexture | undefined;
+  private canvasWidth: number | undefined;
+  private canvasHeight: number | undefined;
+
   constructor(id: string, textureFile: string, imageRatio: number) {
-    this.size = 255;
-    this.fadeFactor = 0.99;
+    this.size = 64;
+    this.fadeFactor = 0.97;
     this.initialOffsetFactor = 20;
     this.mouseOffsetFactor = 50;
-    this.distortionSize = 25;
+    this.distortionSize = 10;
     this.canvas = document.getElementById(id);
     this.scene = new THREE.Scene();
     this.getRenderer();
     this.getCamera();
     this.getComposer();
     this.clock = new THREE.Clock();
+    this.canvasWidth = window.innerWidth;
+    this.canvasHeight = window.innerHeight;
     this.imageRatio = imageRatio;
     this.mouse = {
       x: 0,
@@ -163,15 +167,6 @@ export class AnimationEngine {
     const composer = new EffectComposer(this.renderer);
     composer.addPass(new RenderPass(this.scene, this.camera));
 
-    const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(this.canvas.clientWidth, this.canvas.clientHeight),
-      2,
-      1,
-      0.9,
-    );
-
-    composer.addPass(bloomPass);
-
     this.composer = composer;
   }
 
@@ -258,8 +253,21 @@ export class AnimationEngine {
   }
 
   private getResolution() {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    if (!this.canvas) {
+      throw new Error("canvas is not defined");
+    }
+
+    const parent = this.canvas.parentElement;
+    if (!parent) {
+      throw new Error("parent is not defined");
+    }
+
+    const width = parent.clientWidth;
+    const height = parent.clientHeight;
+
+    this.canvasWidth = width;
+    this.canvasHeight = height;
+
     const screenRatio = width / height;
     let a1;
     let a2;
@@ -297,10 +305,14 @@ export class AnimationEngine {
     this.composer.setSize(resolution.x, resolution.y);
   }
   onMouseMove(e: MouseEvent) {
+    if (!this.canvasWidth || !this.canvasHeight) {
+      return;
+    }
+
     this.mouse.prevX = this.mouse.x;
     this.mouse.prevY = this.mouse.y;
-    this.mouse.x = e.clientX / window.innerWidth;
-    this.mouse.y = 1 - e.clientY / window.innerHeight;
+    this.mouse.x = e.offsetX / this.canvasWidth;
+    this.mouse.y = 1 - e.offsetY / this.canvasHeight;
     this.mouse.speedX = this.mouse.x - this.mouse.prevX;
     this.mouse.speedY = this.mouse.y - this.mouse.prevY;
   }
