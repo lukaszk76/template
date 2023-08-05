@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-import { useTheme } from "next-themes";
+import React, { memo, useLayoutEffect } from "react";
+import { gsap } from "gsap";
 
 const logos = [
   { image: "/react.png", name: "React" },
@@ -14,17 +14,18 @@ const logos = [
 ];
 
 export const Logos = memo(() => {
-  const { theme } = useTheme();
+  useLayoutEffect(() => {
+    gsap.from(".technology", { duration: 0.3, yPercent: 200, stagger: -0.1 });
+  }, []);
+
   return (
-    <div className="flex gap-16">
+    <div className="flex gap-4">
       {logos.map((logo) => (
         <div key={logo.image} className="flex flex-col items-center gap-2">
           <div
-            className={`w-16 h-16 z-[100] rounded-full shadow-lg flex items-center justify-center backdrop-blur-lg ${
-              theme === "dark" ? "bg-foreground" : "bg-background"
-            } `}
+            className={`w-8 h-8 rounded shadow-lg bg-card flex items-center justify-center backdrop-blur-lg bg-card technology`}
           >
-            <img src={logo.image} alt="logo" className="w-10" />
+            <img src={logo.image} alt="logo" className="w-6" />
           </div>
           <span className="text-xs text-muted-foreground">{logo.name}</span>
         </div>

@@ -48,6 +48,7 @@ export const Ciphered = memo(({ text }: CipheredProps) => {
   const [generator, setGenerator] = useState<Generator<
     CipheredLetter[]
   > | null>(null);
+  const [isDecoded, setIsDecoded] = useState<boolean>(false);
 
   const buildText = useCallback(
     (text: CipheredLetter[] | undefined) => {
@@ -79,6 +80,7 @@ export const Ciphered = memo(({ text }: CipheredProps) => {
 
         if (buildText(generatorText) === text.text) {
           clearInterval(interval);
+          setIsDecoded(true);
         }
       }
     }, 10);
@@ -91,7 +93,11 @@ export const Ciphered = memo(({ text }: CipheredProps) => {
     <div className="p-4 flex flex-col gap-4">
       <h3 className="text-xl font-bold">{text.title}</h3>
       <Separator />
-      <span className="text-sm w-full text-muted-foreground">
+      <span
+        className={`text-sm w-full  transition-all transition-700 ease-in-out text-muted-foreground ${
+          isDecoded ? "opacity-100 blur-none" : "opacity-80 blur-[1px]"
+        }`}
+      >
         {currentText}
       </span>
     </div>
