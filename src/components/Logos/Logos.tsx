@@ -7,10 +7,10 @@ const logos = [
   { image: "/js.png", name: "Javascript" },
   { image: "/nextjs.png", name: "Next.js" },
   { image: "/tailwindcss.svg", name: "TailwindCSS" },
-  { image: "/three.svg", name: "Three.js" },
+  { image: "/three.png", name: "Three.js" },
   { image: "/material.png", name: "Material UI" },
   { image: "/gsap.png", name: "GSAP" },
-  { image: "/firebase.png", name: "Firebase" },
+  { image: "/google.png", name: "Google" },
 ];
 
 export const Logos = memo(() => {
