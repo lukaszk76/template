@@ -6,7 +6,7 @@ import { useTranslations } from "@/lib/useTranslations";
 export const Hero = memo(() => {
   const { getTranslation } = useTranslations();
   return (
-    <div className="w-full">
+    <div className="relative w-full h-full">
       <ThreeAnimation
         id="main-webgl-background"
         src="/background.png"
@@ -14,7 +14,12 @@ export const Hero = memo(() => {
         className="w-full inset-0 h-[50vh]"
       />
 
-      <div className="absolute flex flex-col w-full md:w-1/2 justify-start md:justify-center gap-4 md:gap-12 px-12 py-12 -translate-y-[50vh]">
+      <div
+        style={{
+          boxShadow: "0px 0px 0px 35px rgba(255,255,255,0.05)",
+        }}
+        className="z-20 rounded-full absolute flex flex-col w-full h-full md:w-1/2 justify-start md:justify-center gap-4 md:gap-12 px-12 py-12 -translate-y-[50vh]"
+      >
         <div className="w-full h-max flex gap-4 items-center text-primary">
           <Icons.logo className="w-1/12" />
           <h1 className="text-4xl font-bold">CodeDev</h1>

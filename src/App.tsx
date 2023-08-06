@@ -46,12 +46,12 @@ function App() {
   }, [getTranslation]);
 
   return (
-    <div className="w-screen min-h-screen">
+    <div className="w-screen min-h-screen ">
       <div className="cursor"></div>
       <div className="cursor-pointer"></div>
       <Menu />
-      <div className="w-screen bg-card flex flex-col items-center h-full pt-[7vh]">
-        <div className="flex w-full h-full max-w-[1200px] flex-col items-start gap-8 bg-background">
+      <div className="w-screen bg-card flex flex-col items-center h-full min-h-screen pt-[7vh]">
+        <div className="flex w-full h-full min-h-screen max-w-[1200px] flex-col items-start gap-8 bg-background">
           <Hero />
 
           <div className="flex flex-col gap-4 px-8">

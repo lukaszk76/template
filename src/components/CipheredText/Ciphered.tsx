@@ -11,23 +11,6 @@ interface CipheredLetter {
   position: number;
 }
 
-function* bubbleSort(text: CipheredLetter[]) {
-  //Outer pass
-
-  for (let i = 0; i < text.length; i++) {
-    //Inner pass
-    for (let j = 0; j < text.length - i - 1; j++) {
-      //Value comparison using ascending order
-
-      if (text[j + 1].position < text[j].position) {
-        //Swapping
-        [text[j + 1], text[j]] = [text[j], text[j + 1]];
-      }
-    }
-    yield text;
-  }
-}
-
 function* insertionSort(text: CipheredLetter[]) {
   //Start from the second element.
   for (let i = 1; i < text.length; i++) {
@@ -95,7 +78,7 @@ export const Ciphered = memo(({ text }: CipheredProps) => {
       <Separator />
       <span
         className={`text-sm w-full  transition-all transition-700 ease-in-out text-muted-foreground ${
-          isDecoded ? "opacity-100 blur-none" : "opacity-80 blur-[1px]"
+          isDecoded ? "opacity-100" : "opacity-40"
         }`}
       >
         {currentText}

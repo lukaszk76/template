@@ -1,7 +1,8 @@
-import { LucideProps, Mouse } from "lucide-react";
+import { LucideProps, Linkedin, Github } from "lucide-react";
 
 export const Icons = {
-  mouse: Mouse,
+  linkedin: Linkedin,
+  github: Github,
   logo: (props: LucideProps) => (
     <svg viewBox="0 0 555 640" {...props}>
       <path

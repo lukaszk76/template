@@ -13,8 +13,6 @@ import {
 import vertex from "./glsl/vertex.glsl";
 // @ts-ignore
 import fragment from "./glsl/fragment.glsl";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 
 interface MouseI {
   x: number;
@@ -30,7 +28,6 @@ export class AnimationEngine {
   private readonly scene: Scene;
   private renderer: WebGLRenderer | undefined;
   private camera: OrthographicCamera | undefined;
-  private composer: EffectComposer | undefined;
   private mesh: Mesh<PlaneGeometry, ShaderMaterial> | undefined;
   private clock: Clock;
   private geometry: PlaneGeometry | undefined;
@@ -47,7 +44,7 @@ export class AnimationEngine {
 
   constructor(id: string, textureFile: string, imageRatio: number) {
     this.size = 64;
-    this.fadeFactor = 0.97;
+    this.fadeFactor = 0.98;
     this.initialOffsetFactor = 20;
     this.mouseOffsetFactor = 50;
     this.distortionSize = 10;
@@ -55,7 +52,6 @@ export class AnimationEngine {
     this.scene = new THREE.Scene();
     this.getRenderer();
     this.getCamera();
-    this.getComposer();
     this.clock = new THREE.Clock();
     this.canvasWidth = window.innerWidth;
     this.canvasHeight = window.innerHeight;
@@ -150,26 +146,6 @@ export class AnimationEngine {
     this.camera = camera;
   }
 
-  private getComposer() {
-    if (!this.renderer) {
-      throw new Error("renderer is not defined");
-    }
-    if (!this.scene) {
-      throw new Error("scene is not defined");
-    }
-    if (!this.camera) {
-      throw new Error("camera is not defined");
-    }
-
-    if (!this.canvas) {
-      throw new Error("canvas is not defined");
-    }
-    const composer = new EffectComposer(this.renderer);
-    composer.addPass(new RenderPass(this.scene, this.camera));
-
-    this.composer = composer;
-  }
-
   private async getMesh(textureFile: string) {
     if (!this.geometry) {
       this.getGeometry();
@@ -217,14 +193,14 @@ export class AnimationEngine {
     texture.needsUpdate = true;
   }
   private animate() {
-    if (!this.renderer || !this.mesh || !this.composer) return;
+    if (!this.renderer || !this.mesh || !this.camera) return;
 
     this.mesh.material.uniforms.uTime.value = this.clock.getElapsedTime();
     this.mesh.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
     this.updateDataTexture();
 
-    this.composer.render();
+    this.renderer.render(this.scene, this.camera);
     window.requestAnimationFrame(this.animate.bind(this));
   }
 
@@ -298,11 +274,6 @@ export class AnimationEngine {
     }
     this.renderer.setSize(resolution.x, resolution.y);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    if (!this.composer) {
-      throw new Error("composer is not defined");
-    }
-    this.composer.setSize(resolution.x, resolution.y);
   }
   onMouseMove(e: MouseEvent) {
     if (!this.canvasWidth || !this.canvasHeight) {
