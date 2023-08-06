@@ -16,8 +16,8 @@ const addCursorPointer = () => {
   let timeout;
   //follow cursor on mousemove
   document.addEventListener("mousemove", (e) => {
-    let x = e.pageX;
-    let y = e.pageY;
+    let x = e.clientX;
+    let y = e.clientY;
     cursorPointer.style.top = y + "px";
     cursorPointer.style.left = x + "px";
     cursorPointer.style.opacity = "0.9";

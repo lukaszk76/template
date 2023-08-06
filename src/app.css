@@ -9,7 +9,3 @@
   -webkit-mask-image: radial-gradient(circle at 100% 100%, transparent 40%, black 60%);
   -webkit-mask-size: cover;
 }
-
-body {
-  overflow: hidden;
-}

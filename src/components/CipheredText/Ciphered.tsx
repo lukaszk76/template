@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { TextI } from "@/assets/texts";
 import { Separator } from "@/components/ui/separator";
+import { TextI } from "@/App";
 
 export interface CipheredProps {
   text: TextI;
