@@ -16,14 +16,14 @@ void main() {
     vec2 speed = texture2D( uCurrentPositions, vUv ).zw;
     float offset = rand(vUv);
 
-    float frictionFactor = 0.985;
-    float gravity = 0.0008;
-    float mouseForce = 0.0005;
+    float frictionFactor = 0.990;
+    float gravity = 0.0010;
+    float mouseForce = 0.0004;
     float maxSpeed = 0.1;
-    float maxMouseDist = 0.1;
-    float minGravityDist = 0.001;
+    float maxMouseDist = 0.2;
+    float minGravityDist = 0.005;
     float lifespan = 10.0;
-    float youngness = 0.1;
+    float youngness = 0.01;
 
     float dist = distance(original, position);
     vec2 gravityDir = normalize(original - position);

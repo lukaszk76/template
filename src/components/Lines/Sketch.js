@@ -7,8 +7,8 @@ import vertexSimulationShader from "./shaders/vertexSimulation.glsl";
 export default class Sketch {
   constructor(options) {
     this.time = 0;
-    this.size = 64;
-    this.maxDistance = 0.01;
+    this.size = 1024;
+    this.maxDistance = 0.00002;
     this.count = this.size * this.size;
     this.container = options.dom;
     this.scene = new THREE.Scene();
@@ -88,8 +88,14 @@ export default class Sketch {
         let y = this.getRand(-1, 1);
 
         if (index > 0) {
-          x = data[(index - 1) * 4] + deltaX + this.getRand(-1, 1) * 0.01;
-          y = data[(index - 1) * 4 + 1] + deltaY + this.getRand(-1, 1) * 0.01;
+          x =
+            data[(index - 1) * 4] +
+            deltaX +
+            this.getRand(-1, 1) * this.maxDistance;
+          y =
+            data[(index - 1) * 4 + 1] +
+            deltaY +
+            this.getRand(-1, 1) * this.maxDistance;
         }
 
         if (x > 1) x = 1;
@@ -99,8 +105,8 @@ export default class Sketch {
 
         data[index * 4] = x;
         data[index * 4 + 1] = y;
-        data[index * 4 + 2] = (Math.random() - 0.5) * 0.01;
-        data[index * 4 + 3] = (Math.random() - 0.5) * 0.01;
+        data[index * 4 + 2] = 0;
+        data[index * 4 + 3] = 0;
       }
     }
 
