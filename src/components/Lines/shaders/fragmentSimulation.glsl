@@ -46,11 +46,11 @@ void main() {
 
     position = position + speed;
 
-    float age = mod(time + offset * lifespan, lifespan);
-    if (age < youngness) {
-        speed = vec2(rand(vUv + vec2(0.1, 0.1)) - 0.5, rand(vUv + vec2(0.2, 0.2)) - 0.5) * 0.001;
-        position = original;
-    }
+//    float age = mod(time + offset * lifespan, lifespan);
+//    if (age < youngness) {
+//        speed = vec2(rand(vUv + vec2(0.1, 0.1)) - 0.5, rand(vUv + vec2(0.2, 0.2)) - 0.5) * 0.001;
+//        position = original;
+//    }
 
     gl_FragColor = vec4(position, speed);
 }
