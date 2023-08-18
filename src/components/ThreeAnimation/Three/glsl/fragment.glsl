@@ -7,7 +7,7 @@ void main() {
 
     vec2 newUV = (vUv - vec2(0.5)) * vec2(resolution.z, resolution.w) + vec2(0.5) ;
 
-    vec4 offset = texture2D(uDataTexture, vUv);
+    vec4 offset = texture2D(uDataTexture, newUV);
 
     gl_FragColor = texture2D(uTexture, newUV - 0.02 * offset.rg);
 }

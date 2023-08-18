@@ -17,17 +17,24 @@ export const Hero = memo(() => {
       <div
         style={{
           boxShadow: "0px 0px 0px 35px rgba(255,255,255,0.05)",
+          pointerEvents: "none",
         }}
         className="z-20 rounded-full absolute flex flex-col w-full h-full md:w-1/2 justify-start md:justify-center gap-4 md:gap-12 px-12 py-12 -translate-y-[50vh]"
       >
-        <div className="w-full h-max flex gap-4 items-center text-primary">
+        <div
+          className="w-full h-max flex gap-4 items-center text-primary"
+          style={{ pointerEvents: "none" }}
+        >
           <Icons.logo className="w-1/12" />
           <h1 className="text-4xl font-bold">CodeDev</h1>
         </div>
         <h2 className="text-2xl font-bold text-primary">
           {getTranslation("copy")}
         </h2>
-        <Button className="w-full md:w-1/2" style={{ cursor: "none" }}>
+        <Button
+          className="w-full md:w-1/2"
+          style={{ cursor: "none", pointerEvents: "auto" }}
+        >
           {getTranslation("contact")}
         </Button>
       </div>

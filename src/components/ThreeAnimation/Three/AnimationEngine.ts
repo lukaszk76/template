@@ -43,7 +43,7 @@ export class AnimationEngine {
   private canvasHeight: number | undefined;
 
   constructor(id: string, textureFile: string, imageRatio: number) {
-    this.size = 64;
+    this.size = 128;
     this.fadeFactor = 0.98;
     this.initialOffsetFactor = 20;
     this.mouseOffsetFactor = 50;
@@ -82,9 +82,11 @@ export class AnimationEngine {
 
       this.onResize();
 
-      window.addEventListener("mousemove", (e) => {
-        this.onMouseMove(e);
-      });
+      if (this.canvas?.parentElement) {
+        this.canvas.parentElement.addEventListener("mousemove", (e) => {
+          this.onMouseMove(e);
+        });
+      }
 
       this.animate();
     });
@@ -259,9 +261,6 @@ export class AnimationEngine {
   private onResize() {
     const resolution = this.getResolution();
 
-    // this.camera.aspect = resolution.x / resolution.y;
-    // this.camera.updateProjectionMatrix();
-
     if (!this.mesh) {
       throw new Error("mesh is not defined");
     }
@@ -286,5 +285,7 @@ export class AnimationEngine {
     this.mouse.y = 1 - e.offsetY / this.canvasHeight;
     this.mouse.speedX = this.mouse.x - this.mouse.prevX;
     this.mouse.speedY = this.mouse.y - this.mouse.prevY;
+
+    console.log(this.mouse.x, this.mouse.y);
   }
 }
