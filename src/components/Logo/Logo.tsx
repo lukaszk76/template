@@ -28,7 +28,7 @@ export const Logo = memo(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (maxX === 0 || maxY === 0) return;
       setMouseX((e.pageX - centerX) / maxX);
-      setMouseY((e.pageY - window.scrollY - centerY) / maxY);
+      setMouseY(-(e.clientY - centerY) / maxY);
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
@@ -39,40 +39,40 @@ export const Logo = memo(() => {
     const logo2 = document.getElementById("logo2");
     const logo3 = document.getElementById("logo3");
     if (logo1 && logo2 && logo3) {
-      logo1.style.transform = `translate(${mouseX * 18}px, ${
-        mouseY * 18
-      }px) scale(${1 + 0.2 * Math.abs(mouseX)})`;
-      logo2.style.transform = `translate(${mouseX * 12}px, ${
-        mouseY * 12
-      }px) scale(${1 + 0.132 * Math.abs(mouseX)})`;
-      logo3.style.transform = `translate(${mouseX * 6}px, ${
+      logo1.style.transform = `translate(${mouseX * 6}px, ${
         mouseY * 6
-      }px) scale(${1 + 0.066 * Math.abs(mouseX)})`;
+      }px) scale(${1 + 0.2 * Math.max(Math.abs(mouseX), Math.abs(mouseY))})`;
+      logo2.style.transform = `translate(${mouseX * 4}px, ${
+        mouseY * 4
+      }px) scale(${1 + 0.132 * Math.max(Math.abs(mouseX), Math.abs(mouseY))})`;
+      logo3.style.transform = `translate(${mouseX * 2}px, ${
+        mouseY * 2
+      }px) scale(${1 + 0.066 * Math.max(Math.abs(mouseX), Math.abs(mouseY))})`;
     }
   }, [mouseX, mouseY]);
 
   return (
-    <div className="relative w-1/4 h-[500px] block">
-      <img
-        src="/logo1.png"
-        id="logo4"
-        alt="logo"
-        className="absolute top-0 left-0 opacity-5"
-      />
-      <img
-        src="/logo1.png"
-        id="logo3"
-        alt="logo"
-        className="absolute top-0 left-0 opacity-10"
-      />
-      <img
-        src="/logo1.png"
-        id="logo2"
-        alt="logo"
-        className="absolute top-0 left-0 opacity-10"
-      />
+    <div className="relative w-[20px] h-[20px] block">
       <img
         src="/logo4.png"
+        id="logo4"
+        alt="logo"
+        className="absolute top-0 left-0 opacity-50"
+      />
+      <img
+        src="/logo3.png"
+        id="logo3"
+        alt="logo"
+        className="absolute top-0 left-0 opacity-50"
+      />
+      <img
+        src="/logo2.png"
+        id="logo2"
+        alt="logo"
+        className="absolute top-0 left-0 opacity-50"
+      />
+      <img
+        src="/logo1.png"
         id="logo1"
         alt="logo"
         className="absolute top-0 left-0"

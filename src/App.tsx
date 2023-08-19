@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "@/lib/useTranslations";
 import { Menu } from "@/components/Menu/Menu";
 import { Lines } from "@/components/Lines/Lines";
+import { Footer } from "@/components/Footer/Footer";
 
 export interface TextI {
   title: string;
@@ -59,13 +60,13 @@ function App() {
   }, [cardTexts]);
 
   return (
-    <div className="w-screen min-h-screen ">
+    <div className="w-screen h-max min-h-screen ">
       <Lines />
       <div className="cursor"></div>
       <div className="cursor-pointer"></div>
       <Menu />
-      <div className="w-screen bg-card flex flex-col items-center h-max min-h-screen pt-[7vh]">
-        <div className="flex w-full h-max min-h-screen max-w-[1200px] flex-col items-start gap-8 bg-background z-[1]">
+      <div className="w-screen bg-card flex flex-col items-center h-full min-h-screen pt-[7vh]">
+        <div className="flex w-full h-full min-h-screen max-w-[1200px] flex-col items-start gap-8 bg-background z-[1]">
           <Hero />
 
           <div className="flex flex-col gap-4 px-8">
@@ -78,12 +79,13 @@ function App() {
                   <Ciphered text={text} key={index} />
                 ))}
             </div>
-            <Separator />
+            <Separator className="mx-4 w-full" />
 
             <Logos />
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

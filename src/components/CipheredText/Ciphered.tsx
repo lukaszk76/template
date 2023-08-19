@@ -77,7 +77,7 @@ export const Ciphered = memo(({ text }: CipheredProps) => {
       <h3 className="text-xl font-bold">{text.title}</h3>
       <Separator />
       <span
-        className={`text-sm w-full  transition-all transition-700 ease-in-out text-muted-foreground ${
+        className={`text-sm w-full  transition-all transition-700 ease-in-out text-secondary-foreground ${
           isDecoded ? "opacity-100" : "opacity-40"
         }`}
       >

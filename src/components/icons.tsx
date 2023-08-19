@@ -1,8 +1,20 @@
-import { LucideProps, Linkedin, Github } from "lucide-react";
+import {
+  LucideProps,
+  Linkedin,
+  Github,
+  Home,
+  Phone,
+  Mail,
+  Hash,
+} from "lucide-react";
 
 export const Icons = {
+  home: Home,
+  phone: Phone,
   linkedin: Linkedin,
+  mail: Mail,
   github: Github,
+  hash: Hash,
   logo: (props: LucideProps) => (
     <svg viewBox="0 0 555 640" {...props}>
       <path
