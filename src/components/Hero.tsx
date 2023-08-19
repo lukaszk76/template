@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { ThreeAnimation } from "@/components/ThreeAnimation/ThreeAnimation";
-import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/lib/useTranslations";
+import { Icons } from "./icons";
 export const Hero = memo(() => {
   const { getTranslation } = useTranslations();
   return (
@@ -26,6 +26,7 @@ export const Hero = memo(() => {
           style={{ pointerEvents: "none" }}
         >
           <Icons.logo className="w-1/12" />
+          {/*<Logo />*/}
           <h1 className="text-4xl font-bold">CodeDev</h1>
         </div>
         <h2 className="text-2xl font-bold text-primary">

@@ -73,7 +73,7 @@ export const Ciphered = memo(({ text }: CipheredProps) => {
   if (!currentText?.length) return null;
 
   return (
-    <div className="p-4 flex flex-col gap-4">
+    <div className="p-4 flex flex-col gap-4 ciphered-card">
       <h3 className="text-xl font-bold">{text.title}</h3>
       <Separator />
       <span

@@ -285,7 +285,5 @@ export class AnimationEngine {
     this.mouse.y = 1 - e.offsetY / this.canvasHeight;
     this.mouse.speedX = this.mouse.x - this.mouse.prevX;
     this.mouse.speedY = this.mouse.y - this.mouse.prevY;
-
-    console.log(this.mouse.x, this.mouse.y);
   }
 }
