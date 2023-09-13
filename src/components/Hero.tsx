@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { ThreeAnimation } from "@/components/ThreeAnimation/ThreeAnimation";
+import { ThreeAnimation } from "@/components/ThreeAnimationPipes/ThreeAnimation";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/lib/useTranslations";
 import { Icons } from "./icons";
@@ -11,7 +11,7 @@ export const Hero = memo(() => {
         id="main-webgl-background"
         src="/background.png"
         imageRatio={2100 / 972}
-        className="w-full inset-0 h-[50vh]"
+        className="w-full inset-0 h-[50vh] z-[-1]"
       />
 
       <div
