@@ -19,15 +19,6 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { CustomShader } from "./CustomShader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-interface MouseI {
-  x: number;
-  y: number;
-  prevX: number;
-  prevY: number;
-  speedX: number;
-  speedY: number;
-}
-
 export class AnimationEngine {
   private readonly canvas: Element | null;
   private readonly scene: Scene;
