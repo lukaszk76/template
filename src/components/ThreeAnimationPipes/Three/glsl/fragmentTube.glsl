@@ -1,8 +1,10 @@
 varying vec2 vUv;
 varying vec3 vPosition;
 uniform float uTime;
-uniform sampler2D uNormals;
-
+uniform sampler2D uDots;
+uniform sampler2D uStripes;
+varying vec3 vWorldPosition;
+varying vec3 vNormal;
 
 vec2 fade(vec2 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
@@ -43,25 +45,21 @@ float cnoise(vec2 P){
 
 
 void main() {
-    vec2 st = gl_PointCoord.xy;
+    float texture1 = texture2D(uStripes, vUv - uTime * 0.05).r;
+    float texture11 = texture2D(uStripes, vUv - uTime * 0.05 * 1.5).r;
+    float texture2 = texture2D(uDots, vUv * 2. - uTime * 0.09).r;
+
+    vec3 viewDirection = -normalize(vWorldPosition - cameraPosition);
+    float fresnel = pow( dot(viewDirection, vNormal), 2.0);
+
 
     vec3 color1 = vec3(0.482, 0.491, 0.422);
     vec3 color2 = vec3(0.913, 0.237, 0.256);
 
+    vec3 color = mix(color2, color1, texture11);
 
-    vec3 normalTexture = texture2D(uNormals, st).xyz;
-    vec3 normal = vec3(normalTexture.xy * 2.0 - 1.0, 0.);
-    normal.z = sqrt(1.0 - normal.x * normal.x - normal.y * normal.y);
-    normal = normalize(normal);
-
-    vec3 lightPosition = vec3(1., 1., 1.0);
-    float diffuse = max(0.0, dot(normal, normalize(lightPosition - vPosition)));
-
-    float disc = length(st - vec2(0.5));
-    float alpha = smoothstep(0.5, 0.45, disc);
-
-    vec3 color = mix(color1, color2, normal.x * 0.5 + normal.x * 0.5);
+    float alpha = min(texture1, texture11) + texture2;
 
 
-    gl_FragColor = vec4(color, alpha * diffuse * 0.5);
+    gl_FragColor = vec4(color * vec3(texture11, texture1, texture2), alpha  * fresnel);
 }

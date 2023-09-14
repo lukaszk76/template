@@ -2,22 +2,33 @@ import * as THREE from "three";
 import {
   BufferGeometry,
   Clock,
+  Mesh,
   NormalBufferAttributes,
   PerspectiveCamera,
   Points,
   Scene,
   ShaderMaterial,
+  TubeGeometry,
   WebGLRenderer,
 } from "three";
-// @ts-ignore
-import vertex from "./glsl/vertex.glsl";
-// @ts-ignore
-import fragment from "./glsl/fragment.glsl";
+
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { CustomShader } from "./CustomShader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import normals from "/sphere_normal.png";
+import dots from "/dust.jpeg";
+import stripes from "/stripes.jpeg";
+
+// @ts-ignore
+import vertex from "./glsl/vertex.glsl";
+// @ts-ignore
+import fragment from "./glsl/fragment.glsl";
+// @ts-ignore
+import vertexTube from "./glsl/vertexTube.glsl";
+// @ts-ignore
+import fragmentTube from "./glsl/fragmentTube.glsl";
 
 export class AnimationEngine {
   private readonly canvas: Element | null;
@@ -32,10 +43,15 @@ export class AnimationEngine {
   private positions: Float32Array | undefined;
   private randoms: Float32Array | undefined;
   private sizes: Float32Array | undefined;
+  private previousScrollProgress: number;
+  private tubeGeometry: TubeGeometry | undefined;
+  private tubeMaterial: ShaderMaterial | undefined;
+  private tube: Mesh<TubeGeometry, ShaderMaterial> | undefined;
   constructor(id: string) {
     this.canvas = document.getElementById(id);
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
+    this.previousScrollProgress = 0;
 
     this.getRenderer();
     this.getCamera();
@@ -43,11 +59,17 @@ export class AnimationEngine {
     this.addOrbitControls();
     this.getGeometry();
     this.getMesh();
+    this.getTube();
 
     if (!this.mesh) {
       throw new Error("mesh is not defined");
     }
     this.scene.add(this.mesh);
+
+    if (!this.tube) {
+      throw new Error("tube is not defined");
+    }
+    this.scene.add(this.tube);
 
     if (!this.camera) {
       throw new Error("camera is not defined");
@@ -57,9 +79,29 @@ export class AnimationEngine {
     window.addEventListener("resize", () => {
       this.onResize();
     });
+    window.addEventListener("scroll", () => {
+      this.onScroll();
+    });
 
     this.onResize();
     this.animate();
+  }
+
+  private onScroll() {
+    if (!this.camera) {
+      throw new Error("mesh is not defined");
+    }
+    const scroll = window.scrollY;
+    const height = window.innerHeight;
+    const offset = this.canvas?.getBoundingClientRect().top || 0;
+    const scrollProgress = scroll / (offset + height);
+    const scrollDelta = scrollProgress - this.previousScrollProgress;
+    this.previousScrollProgress = scrollProgress;
+
+    this.camera.position.x += 10 * scrollDelta;
+    this.camera.position.y += 0.7 * scrollDelta * 10;
+    this.camera.position.z += 0.5 * scrollDelta * 10;
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
   }
 
   private getRenderer() {
@@ -103,7 +145,7 @@ export class AnimationEngine {
       throw new Error("camera is not defined");
     }
     const controls = new OrbitControls(this.camera, this.renderer.domElement);
-    controls.enableZoom = true;
+    controls.enableZoom = false;
     controls.enablePan = false;
     controls.enableRotate = true;
     controls.autoRotate = true;
@@ -140,15 +182,57 @@ export class AnimationEngine {
   }
 
   private animate() {
-    if (!this.renderer || !this.mesh || !this.composer) return;
+    if (!this.renderer || !this.mesh || !this.composer || !this.tube) return;
 
     this.mesh.material.uniforms.uTime.value = this.clock.getElapsedTime();
     this.mesh.material.uniforms.needsUpdate = new THREE.Uniform(true);
+
+    this.tube.material.uniforms.uTime.value = this.clock.getElapsedTime();
+    this.tube.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
     this.controls?.update();
 
     this.composer.render();
     window.requestAnimationFrame(this.animate.bind(this));
+  }
+
+  private getTube() {
+    const points = [];
+    for (let i = 0; i <= 100; i++) {
+      const angle = (i / 100) * Math.PI * 2;
+      const x = Math.sin(angle) + 2 * Math.sin(angle * 2);
+      const y = Math.cos(angle) - 2 * Math.cos(angle * 2);
+      const z = -Math.sin(angle * 3);
+      points.push(new THREE.Vector3(x, y, z));
+    }
+    const curve = new THREE.CatmullRomCurve3(points);
+    this.tubeGeometry = new THREE.TubeGeometry(curve, 100, 0.3, 100, true);
+
+    const dotsTexture = new THREE.TextureLoader().load(dots);
+    const stripesTexture = new THREE.TextureLoader().load(stripes);
+    dotsTexture.wrapS = THREE.RepeatWrapping;
+    dotsTexture.wrapT = THREE.RepeatWrapping;
+    stripesTexture.wrapS = THREE.RepeatWrapping;
+    stripesTexture.wrapT = THREE.RepeatWrapping;
+
+    this.tubeMaterial = new THREE.ShaderMaterial({
+      extensions: {
+        derivatives: "#extension GL_OES_standard_derivatives : enable",
+      },
+      side: THREE.DoubleSide,
+      uniforms: {
+        uTime: { value: 0 },
+        uProgress: { value: 1 },
+        uDots: { value: dotsTexture },
+        uStripes: { value: stripesTexture },
+      },
+      vertexShader: vertexTube,
+      fragmentShader: fragmentTube,
+      transparent: true,
+      depthTest: false,
+    });
+
+    this.tube = new THREE.Mesh(this.tubeGeometry, this.tubeMaterial);
   }
 
   private getGeometry() {
@@ -184,12 +268,19 @@ export class AnimationEngine {
 
   private getMaterial() {
     return new THREE.ShaderMaterial({
+      extensions: {
+        derivatives: "#extension GL_OES_standard_derivatives : enable",
+      },
+      side: THREE.DoubleSide,
       uniforms: {
         uTime: { value: 0 },
         uProgress: { value: 1 },
+        uNormals: { value: new THREE.TextureLoader().load(normals) },
       },
       vertexShader: vertex,
       fragmentShader: fragment,
+      transparent: true,
+      depthTest: false,
     });
   }
 
@@ -208,10 +299,6 @@ export class AnimationEngine {
     if (this.camera) {
       this.camera.aspect = resolution.x / resolution.y;
       this.camera.updateProjectionMatrix();
-    }
-
-    if (!this.mesh) {
-      throw new Error("mesh is not defined");
     }
 
     if (!this.renderer) {
