@@ -2,6 +2,8 @@ varying vec2 vUv;
 varying vec3 vPosition;
 uniform float uTime;
 uniform sampler2D uNormals;
+uniform vec3 uColor1;
+uniform vec3 uColor2;
 
 
 vec2 fade(vec2 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
@@ -45,8 +47,8 @@ float cnoise(vec2 P){
 void main() {
     vec2 st = gl_PointCoord.xy;
 
-    vec3 color1 = vec3(0.482, 0.491, 0.422);
-    vec3 color2 = vec3(0.913, 0.237, 0.256);
+    vec3 color1 = uColor1;
+    vec3 color2 = uColor2;
 
 
     vec3 normalTexture = texture2D(uNormals, st).xyz;

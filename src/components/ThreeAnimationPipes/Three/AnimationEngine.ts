@@ -4,6 +4,7 @@ import {
   Clock,
   Mesh,
   PerspectiveCamera,
+  PlaneGeometry,
   Points,
   Scene,
   ShaderMaterial,
@@ -11,14 +12,10 @@ import {
   WebGLRenderer,
 } from "three";
 
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { CustomShader } from "./CustomShader";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import normals from "/sphere_normal.png";
 import dots from "/dust.jpeg";
 import stripes from "/stripes.jpeg";
+import noise from "/noise1.jpg";
 
 // @ts-ignore
 import vertex from "./glsl/vertex.glsl";
@@ -28,8 +25,32 @@ import fragment from "./glsl/fragment.glsl";
 import vertexTube from "./glsl/vertexTube.glsl";
 // @ts-ignore
 import fragmentTube from "./glsl/fragmentTube.glsl";
+// @ts-ignore
+import vertexRays from "./glsl/vertexRays.glsl";
+// @ts-ignore
+import fragmentRays from "./glsl/fragmentRays.glsl";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import { CustomShader } from "./CustomShader";
+import gsap from "gsap";
+
+interface MouseI {
+  x: number;
+  y: number;
+  prevX: number;
+  prevY: number;
+  speedX: number;
+  speedY: number;
+}
+
+interface CameraTargetI {
+  x: number;
+  y: number;
+}
 
 export class AnimationEngine {
+  private mouse: MouseI;
   private readonly canvas: Element | null;
   private readonly scene: Scene;
   private renderer: WebGLRenderer | undefined;
@@ -44,12 +65,22 @@ export class AnimationEngine {
   private readonly pointsMesh3:
     | Points<BufferGeometry, ShaderMaterial>
     | undefined;
+  private readonly pointsMesh4:
+    | Points<BufferGeometry, ShaderMaterial>
+    | undefined;
+  private readonly pointsMesh5:
+    | Points<BufferGeometry, ShaderMaterial>
+    | undefined;
   private clock: Clock;
-  private controls: OrbitControls | undefined;
   private previousScrollProgress: number;
   private readonly tubeMesh1: Mesh<TubeGeometry, ShaderMaterial> | undefined;
   private readonly tubeMesh2: Mesh<TubeGeometry, ShaderMaterial> | undefined;
   private readonly tubeMesh3: Mesh<TubeGeometry, ShaderMaterial> | undefined;
+  private readonly tubeMesh4: Mesh<TubeGeometry, ShaderMaterial> | undefined;
+  private readonly tubeMesh5: Mesh<TubeGeometry, ShaderMaterial> | undefined;
+
+  private cameraTarget: CameraTargetI;
+  private readonly raysMesh: Mesh<PlaneGeometry, ShaderMaterial>;
   constructor(id: string) {
     this.canvas = document.getElementById(id);
     this.scene = new THREE.Scene();
@@ -58,64 +89,98 @@ export class AnimationEngine {
     this.getRenderer();
     this.getCamera();
     this.getComposer();
-    this.addOrbitControls();
+
+    this.mouse = {
+      x: 0,
+      y: 0,
+      prevX: 0,
+      prevY: 0,
+      speedX: 0,
+      speedY: 0,
+    };
+    this.cameraTarget = {
+      x: 0,
+      y: 0,
+    };
 
     const { pointsMesh, tubeMesh } = this.getCurve(
       new THREE.Vector3(0, 0, 2),
       new THREE.Vector3(0, 0, 0),
       0.3,
+      new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
     );
 
     this.pointsMesh1 = pointsMesh;
     this.tubeMesh1 = tubeMesh;
 
     const { pointsMesh: pointsMesh2, tubeMesh: tubeMesh2 } = this.getCurve(
-      new THREE.Vector3(2, -1, -1),
+      new THREE.Vector3(2, -1, 0),
       new THREE.Vector3(-1, -2, 0),
       0.2,
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.482, 0.491, 0.422),
     );
 
     this.pointsMesh2 = pointsMesh2;
     this.tubeMesh2 = tubeMesh2;
 
     const { pointsMesh: pointsMesh3, tubeMesh: tubeMesh3 } = this.getCurve(
-      new THREE.Vector3(-2, 1, -1),
+      new THREE.Vector3(-2, 1, 0),
       new THREE.Vector3(2, 3, 1),
       0.05,
+      new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.482, 0.491, 0.422),
     );
 
     this.pointsMesh3 = pointsMesh3;
     this.tubeMesh3 = tubeMesh3;
 
-    if (!this.pointsMesh1) {
-      throw new Error("mesh1 is not defined");
-    }
+    const { pointsMesh: pointsMesh4, tubeMesh: tubeMesh4 } = this.getCurve(
+      new THREE.Vector3(1, 1.5, 0),
+      new THREE.Vector3(-2, -1, -1),
+      0.03,
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
+    );
+
+    this.pointsMesh4 = pointsMesh4;
+    this.tubeMesh4 = tubeMesh4;
+
+    const { pointsMesh: pointsMesh5, tubeMesh: tubeMesh5 } = this.getCurve(
+      new THREE.Vector3(3, -1.5, 0),
+      new THREE.Vector3(1, 2, 1),
+      0.02,
+      new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.913, 0.237, 0.256),
+      new THREE.Vector3(0.482, 0.491, 0.422),
+    );
+
+    this.pointsMesh5 = pointsMesh5;
+    this.tubeMesh5 = tubeMesh5;
+
+    this.raysMesh = this.getRaysMesh();
+
     this.scene.add(this.pointsMesh1);
-
-    if (!this.pointsMesh2) {
-      throw new Error("mesh2 is not defined");
-    }
     this.scene.add(this.pointsMesh2);
-
-    if (!this.pointsMesh3) {
-      throw new Error("mesh3 is not defined");
-    }
     this.scene.add(this.pointsMesh3);
-
-    if (!this.tubeMesh1) {
-      throw new Error("tube1 is not defined");
-    }
+    this.scene.add(this.pointsMesh4);
+    this.scene.add(this.pointsMesh5);
     this.scene.add(this.tubeMesh1);
-
-    if (!this.tubeMesh2) {
-      throw new Error("tube2 is not defined");
-    }
     this.scene.add(this.tubeMesh2);
-
-    if (!this.tubeMesh3) {
-      throw new Error("tube3 is not defined");
-    }
     this.scene.add(this.tubeMesh3);
+    this.scene.add(this.tubeMesh4);
+    this.scene.add(this.tubeMesh5);
+    this.scene.add(this.raysMesh);
 
     if (!this.camera) {
       throw new Error("camera is not defined");
@@ -129,8 +194,56 @@ export class AnimationEngine {
       this.onScroll();
     });
 
+    if (this.canvas?.parentElement) {
+      this.canvas.parentElement.addEventListener("mousemove", (e) => {
+        this.onMouseMove(e);
+      });
+    }
+
     this.onResize();
     this.animate();
+    this.entryAnimation();
+  }
+
+  private entryAnimation() {
+    if (!this.camera) {
+      throw new Error("camera is not defined");
+    }
+    gsap.from(this.camera.position, {
+      duration: 2,
+      x: 0,
+      y: 0,
+      z: 100,
+      ease: "power3.out",
+    });
+  }
+
+  private onMouseMove(e: MouseEvent) {
+    if (!this.canvas) {
+      return;
+    }
+
+    this.mouse.prevX = this.mouse.x;
+    this.mouse.prevY = this.mouse.y;
+    this.mouse.x = e.offsetX / this.canvas.clientWidth;
+    this.mouse.y = 1 - e.offsetY / this.canvas.clientHeight;
+    this.mouse.speedX = this.mouse.x - this.mouse.prevX;
+    this.mouse.speedY = this.mouse.y - this.mouse.prevY;
+
+    this.cameraTarget.x = this.mouse.x * 4 - 2;
+    this.cameraTarget.y = this.mouse.y * 2 - 1;
+  }
+
+  private moveCamera() {
+    if (!this.camera) {
+      throw new Error("camera is not defined");
+    }
+
+    this.camera.position.x +=
+      (this.cameraTarget.x - this.camera.position.x) * 0.05;
+    this.camera.position.y +=
+      (this.cameraTarget.y - this.camera.position.y) * 0.05;
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
   }
 
   private onScroll() {
@@ -180,27 +293,40 @@ export class AnimationEngine {
     camera.position.y = 0;
     camera.position.z = 10;
     this.camera = camera;
-    this.controls?.update();
   }
 
-  private addOrbitControls() {
-    if (!this.renderer) {
-      throw new Error("renderer is not defined");
-    }
-    if (!this.camera) {
-      throw new Error("camera is not defined");
-    }
-    const controls = new OrbitControls(this.camera, this.renderer.domElement);
-    controls.enableZoom = false;
-    controls.enablePan = false;
-    controls.enableRotate = true;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.5;
-    controls.minDistance = 0.2;
-    controls.maxDistance = 100.0;
-    controls.target.set(0, 0, 0);
-    this.controls = controls;
+  private getRaysMesh() {
+    const geometry = new THREE.PlaneGeometry(8, 5, 1, 1);
+    const material = this.getRaysMaterial();
+    const mesh = new THREE.Mesh(geometry, material);
+
+    mesh.position.x = 0;
+    mesh.position.y = 0;
+    mesh.position.z = 5;
+
+    return mesh;
   }
+
+  private getRaysMaterial() {
+    const texture = new THREE.TextureLoader().load(noise, (texture) => texture);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uTexture: { value: texture },
+        resolution: { value: new THREE.Vector4() },
+        progress: { value: 1 },
+      },
+      vertexShader: vertexRays,
+      fragmentShader: fragmentRays,
+      transparent: true,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+  }
+
   private getComposer() {
     if (!this.renderer) {
       throw new Error("renderer is not defined");
@@ -223,12 +349,12 @@ export class AnimationEngine {
   private getMesh(
     position: THREE.Vector3,
     rotation: THREE.Vector3,
-    vertexShader: string,
-    fragmentShader: string,
+    color1: THREE.Vector3,
+    color2: THREE.Vector3,
     radius = 0.3,
   ) {
     const geometry = this.getGeometry(position);
-    const material = this.getMaterial(vertexShader, fragmentShader, radius);
+    const material = this.getMaterial(color1, color2, radius);
 
     const pointsMesh = new THREE.Points(geometry, material);
     pointsMesh.position.x = position.x;
@@ -248,43 +374,60 @@ export class AnimationEngine {
       !this.pointsMesh1 ||
       !this.pointsMesh2 ||
       !this.pointsMesh3 ||
+      !this.pointsMesh4 ||
+      !this.pointsMesh5 ||
       !this.composer ||
       !this.tubeMesh1 ||
       !this.tubeMesh2 ||
-      !this.tubeMesh3
+      !this.tubeMesh3 ||
+      !this.tubeMesh4 ||
+      !this.tubeMesh5
     )
       return;
+    const time = this.clock.getElapsedTime();
 
-    this.pointsMesh1.material.uniforms.uTime.value =
-      this.clock.getElapsedTime();
+    this.pointsMesh1.material.uniforms.uTime.value = time;
     this.pointsMesh1.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
-    this.pointsMesh2.material.uniforms.uTime.value =
-      this.clock.getElapsedTime();
+    this.pointsMesh2.material.uniforms.uTime.value = time;
     this.pointsMesh2.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
-    this.pointsMesh3.material.uniforms.uTime.value =
-      this.clock.getElapsedTime();
+    this.pointsMesh3.material.uniforms.uTime.value = time;
     this.pointsMesh3.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
-    this.tubeMesh1.material.uniforms.uTime.value = this.clock.getElapsedTime();
+    this.pointsMesh4.material.uniforms.uTime.value = time;
+    this.pointsMesh4.material.uniforms.needsUpdate = new THREE.Uniform(true);
+
+    this.pointsMesh5.material.uniforms.uTime.value = time;
+    this.pointsMesh5.material.uniforms.needsUpdate = new THREE.Uniform(true);
+
+    this.tubeMesh1.material.uniforms.uTime.value = time;
     this.tubeMesh1.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
-    this.tubeMesh2.material.uniforms.uTime.value = this.clock.getElapsedTime();
+    this.tubeMesh2.material.uniforms.uTime.value = time;
     this.tubeMesh2.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
-    this.tubeMesh3.material.uniforms.uTime.value = this.clock.getElapsedTime();
+    this.tubeMesh3.material.uniforms.uTime.value = time;
     this.tubeMesh3.material.uniforms.needsUpdate = new THREE.Uniform(true);
 
-    this.controls?.update();
+    this.tubeMesh4.material.uniforms.uTime.value = time;
+    this.tubeMesh4.material.uniforms.needsUpdate = new THREE.Uniform(true);
+
+    this.tubeMesh5.material.uniforms.uTime.value = time;
+    this.tubeMesh5.material.uniforms.needsUpdate = new THREE.Uniform(true);
+
+    this.raysMesh.material.uniforms.uTime.value = time;
+    this.raysMesh.material.uniforms.needsUpdate = new THREE.Uniform(true);
+
+    this.moveCamera();
 
     this.composer.render();
     window.requestAnimationFrame(this.animate.bind(this));
   }
 
   private getTubeMaterial(
-    vertexShader: string,
-    fragmentShader: string,
+    color1: THREE.Vector3,
+    color2: THREE.Vector3,
     dotsTextureFile: string,
     stripesTextureFile: string,
   ) {
@@ -306,18 +449,21 @@ export class AnimationEngine {
         uProgress: { value: 1 },
         uDots: { value: dotsTexture },
         uStripes: { value: stripesTexture },
+        uColor1: { value: new THREE.Color(color1.x, color1.y, color1.z) },
+        uColor2: { value: new THREE.Color(color2.x, color2.y, color2.z) },
       },
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
+      vertexShader: vertexTube,
+      fragmentShader: fragmentTube,
       transparent: true,
       depthTest: false,
     });
   }
+
   private getTube(
     position: THREE.Vector3,
     rotation: THREE.Vector3,
-    vertexShader: string,
-    fragmentShader: string,
+    color1: THREE.Vector3,
+    color2: THREE.Vector3,
     dotsTextureFile: string,
     stripesTextureFile: string,
     radius = 0.3,
@@ -333,8 +479,8 @@ export class AnimationEngine {
     const curve = new THREE.CatmullRomCurve3(points);
     const tubeGeometry = new THREE.TubeGeometry(curve, 100, radius, 100, true);
     const tubeMaterial = this.getTubeMaterial(
-      vertexShader,
-      fragmentShader,
+      color1,
+      color2,
       dotsTextureFile,
       stripesTextureFile,
     );
@@ -355,19 +501,17 @@ export class AnimationEngine {
     position: THREE.Vector3,
     rotation: THREE.Vector3,
     radius = 0.3,
+    color1: THREE.Vector3,
+    color2: THREE.Vector3,
+    colorTube1: THREE.Vector3,
+    colorTube2: THREE.Vector3,
   ) {
-    const pointsMesh = this.getMesh(
-      position,
-      rotation,
-      vertex,
-      fragment,
-      radius,
-    );
+    const pointsMesh = this.getMesh(position, rotation, color1, color2, radius);
     const tubeMesh = this.getTube(
       position,
       rotation,
-      vertexTube,
-      fragmentTube,
+      colorTube1,
+      colorTube2,
       dots,
       stripes,
       radius,
@@ -406,8 +550,8 @@ export class AnimationEngine {
   }
 
   private getMaterial(
-    vertexShader?: string,
-    fragmentShader?: string,
+    color1: THREE.Vector3,
+    color2: THREE.Vector3,
     radius = 0.3,
   ) {
     return new THREE.ShaderMaterial({
@@ -421,9 +565,11 @@ export class AnimationEngine {
         uProgress: { value: 1 },
         uNormals: { value: new THREE.TextureLoader().load(normals) },
         uRadius: { value: radius },
+        uColor1: { value: new THREE.Color(color1.x, color1.y, color1.z) },
+        uColor2: { value: new THREE.Color(color2.x, color2.y, color2.z) },
       },
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
+      vertexShader: vertex,
+      fragmentShader: fragment,
       transparent: true,
       depthTest: true,
     });
@@ -438,6 +584,7 @@ export class AnimationEngine {
 
     return { x: width, y: height };
   }
+
   private onResize() {
     const resolution = this.getResolution();
 

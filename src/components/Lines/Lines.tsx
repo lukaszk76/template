@@ -13,7 +13,7 @@ export const Lines = memo(() => {
     linesArray.forEach((_, index) => {
       const lines = document.getElementById(`lines-${index}`);
       if (lines) {
-        const sketch = new Sketch({
+        new Sketch({
           dom: lines,
           variant: index,
         });
@@ -23,7 +23,7 @@ export const Lines = memo(() => {
   return (
     <>
       {linesArray.map((_, index) => (
-        <div id={`lines-${index}`} className="lines"></div>
+        <div key={index} id={`lines-${index}`} className="lines"></div>
       ))}
     </>
   );

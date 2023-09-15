@@ -48,13 +48,13 @@ float noise(float p){
 
 void main() {
     vUv = uv;
-    float progress = fract(aRandom.x + uTime * 0.05);
+    float progress = fract(aRandom.x + uTime * 0.03);
     vec3 normal = getNormal(progress);
     vec3 tangent = getTangent(progress);
     vec3 binormal = normalize(cross(normal, tangent));
 
     float radius = uRadius + aRandom.z * 0.2;
-    float angle = aRandom.y * PI * 2. * noise(uTime * 0.5)  + aRandom.z * 7.0;
+    float angle = aRandom.y * PI * 2. * noise(uTime * 0.3)  + aRandom.z * 7.0;
     float cx = radius * cos(angle);
     float cy = radius * sin(angle);
 

@@ -5,6 +5,8 @@ uniform sampler2D uDots;
 uniform sampler2D uStripes;
 varying vec3 vWorldPosition;
 varying vec3 vNormal;
+uniform vec3 uColor1;
+uniform vec3 uColor2;
 
 vec2 fade(vec2 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
@@ -45,16 +47,16 @@ float cnoise(vec2 P){
 
 
 void main() {
-    float texture1 = texture2D(uStripes, vUv - uTime * 0.05).r;
-    float texture11 = texture2D(uStripes, vUv - uTime * 0.05 * 1.5).r;
-    float texture2 = texture2D(uDots, vUv * 2. - uTime * 0.09).r;
+    float texture1 = texture2D(uStripes, vUv - uTime * 0.03).r;
+    float texture11 = texture2D(uStripes, vUv - uTime * 0.03 * 1.5).r;
+    float texture2 = texture2D(uDots, vUv * 2. - uTime * 0.05).r;
 
     vec3 viewDirection = -normalize(vWorldPosition - cameraPosition);
     float fresnel = pow( dot(viewDirection, vNormal), 2.0);
 
 
-    vec3 color1 = vec3(0.482, 0.491, 0.422);
-    vec3 color2 = vec3(0.913, 0.237, 0.256);
+    vec3 color1 = uColor1;
+    vec3 color2 = uColor2;
 
     vec3 color = mix(color2, color1, texture11);
 
