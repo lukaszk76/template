@@ -4,6 +4,7 @@ varying vec3 vPosition;
 attribute vec3 aRandom;
 attribute float aSize;
 uniform float uProgress;
+uniform float uRadius;
 
 float PI = 3.141592653589793238;
 
@@ -52,7 +53,7 @@ void main() {
     vec3 tangent = getTangent(progress);
     vec3 binormal = normalize(cross(normal, tangent));
 
-    float radius = 0.3 + aRandom.z * 0.2;
+    float radius = uRadius + aRandom.z * 0.2;
     float angle = aRandom.y * PI * 2. * noise(uTime * 0.5)  + aRandom.z * 7.0;
     float cx = radius * cos(angle);
     float cy = radius * sin(angle);
