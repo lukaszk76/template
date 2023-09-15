@@ -9,8 +9,6 @@ export const Hero = memo(() => {
     <div className="relative w-full h-full">
       <ThreeAnimation
         id="main-webgl-background"
-        src="/background.png"
-        imageRatio={2100 / 972}
         className="w-full inset-0 h-[50vh] z-[-1]"
       />
 
