@@ -36,7 +36,9 @@ export class AnimationEngine {
   private renderer: WebGLRenderer | undefined;
   private camera: PerspectiveCamera | undefined;
   private composer: EffectComposer | undefined;
-  private mesh: Points<BufferGeometry<NormalBufferAttributes>, ShaderMaterial>;
+  private mesh:
+    | Points<BufferGeometry<NormalBufferAttributes>, ShaderMaterial>
+    | undefined;
   private clock: Clock;
   private geometry: BufferGeometry<NormalBufferAttributes> | undefined;
   private controls: OrbitControls | undefined;
@@ -52,7 +54,6 @@ export class AnimationEngine {
     this.scene = new THREE.Scene();
     this.clock = new THREE.Clock();
     this.previousScrollProgress = 0;
-
     this.getRenderer();
     this.getCamera();
     this.getComposer();
@@ -217,6 +218,7 @@ export class AnimationEngine {
 
     this.tubeMaterial = new THREE.ShaderMaterial({
       extensions: {
+        // @ts-ignore
         derivatives: "#extension GL_OES_standard_derivatives : enable",
       },
       side: THREE.DoubleSide,
@@ -269,6 +271,7 @@ export class AnimationEngine {
   private getMaterial() {
     return new THREE.ShaderMaterial({
       extensions: {
+        // @ts-ignore
         derivatives: "#extension GL_OES_standard_derivatives : enable",
       },
       side: THREE.DoubleSide,
