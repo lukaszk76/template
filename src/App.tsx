@@ -11,6 +11,7 @@ import { useTranslations } from "@/lib/useTranslations";
 import { Menu } from "@/components/Menu/Menu";
 import { Lines } from "@/components/Lines/Lines";
 import { Footer } from "@/components/Footer/Footer";
+import { setMetaDescription, setMetaTitle, setHtmlLang } from "@/lib/utils";
 
 export interface TextI {
   title: string;
@@ -23,7 +24,7 @@ function App() {
 
   const [cardTexts, setCardTexts] = React.useState<TextI[]>();
 
-  const { getTranslation } = useTranslations();
+  const { getTranslation, language } = useTranslations();
 
   useEffect(() => {
     const texts = [
@@ -45,7 +46,17 @@ function App() {
       },
     ];
     setCardTexts(texts);
-  }, [getTranslation]);
+    setMetaDescription(getTranslation("meta_description"));
+    setMetaTitle(getTranslation("meta_title"));
+    setHtmlLang(language);
+  }, [
+    getTranslation,
+    language,
+    setCardTexts,
+    setMetaDescription,
+    setMetaTitle,
+    setHtmlLang,
+  ]);
 
   useLayoutEffect(() => {
     const cards = document.querySelectorAll(".ciphered-card");
