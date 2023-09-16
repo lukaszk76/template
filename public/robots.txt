@@ -1,0 +1,3 @@
+Sitemap: https://code-dev.pl/sitemap.xml
+
+User-Agent: *
