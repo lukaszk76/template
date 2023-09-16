@@ -21,7 +21,7 @@ export const Logos = memo(() => {
   }, []);
 
   return (
-    <div className="flex w-full justify-between py-8 px-4">
+    <div className="grid grid-cols-4 gap-8 md:gap-0 md:flex w-full justify-between pt-4 pb-8 px-4">
       {logos.map((logo) => (
         <div key={logo.image} className="flex flex-col gap-2 items-center ">
           <div

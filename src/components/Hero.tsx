@@ -17,7 +17,7 @@ export const Hero = memo(() => {
           boxShadow: "0px 0px 0px 35px rgba(255,255,255,0.05)",
           pointerEvents: "none",
         }}
-        className="z-20 rounded-full absolute flex flex-col w-full h-full md:w-1/2 justify-start md:justify-center gap-4 md:gap-12 px-12 py-12 -translate-y-[50vh]"
+        className="z-20 rounded-full absolute flex flex-col w-full h-full md:w-1/2 justify-around md:justify-center gap-4 md:gap-12 px-12 py-12 -translate-y-[50vh]"
       >
         <div
           className="w-full h-max flex gap-4 items-center text-primary"

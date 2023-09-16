@@ -31,9 +31,8 @@ import vertexRays from "./glsl/vertexRays.glsl";
 import fragmentRays from "./glsl/fragmentRays.glsl";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { CustomShader } from "./CustomShader";
 import gsap from "gsap";
+import { ClearPass } from "three/examples/jsm/postprocessing/ClearPass";
 
 interface MouseI {
   x: number;
@@ -337,11 +336,20 @@ export class AnimationEngine {
     if (!this.camera) {
       throw new Error("camera is not defined");
     }
-    const composer = new EffectComposer(this.renderer);
-    composer.addPass(new RenderPass(this.scene, this.camera));
 
-    const customShader = new ShaderPass(CustomShader);
-    composer.addPass(customShader);
+    const params = {
+      clearColor: 0x868a77,
+      clearAlpha: 0.05,
+    };
+
+    const composer = new EffectComposer(this.renderer);
+
+    const clearPass = new ClearPass(params.clearColor, params.clearAlpha);
+    composer.addPass(clearPass);
+
+    const renderPass = new RenderPass(this.scene, this.camera);
+    renderPass.clear = false;
+    composer.addPass(renderPass);
 
     this.composer = composer;
   }

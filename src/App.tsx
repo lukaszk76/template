@@ -48,15 +48,26 @@ function App() {
   }, [getTranslation]);
 
   useLayoutEffect(() => {
-    const cipheredGrid = document.getElementById("ciphered-grid");
-    if (cipheredGrid) {
-      const { height } = cipheredGrid.getBoundingClientRect();
-      const cards = document.querySelectorAll(".ciphered-card");
-      cards.forEach((card) => {
-        // @ts-ignore
-        card.style.height = `${height}px`;
-      });
+    const cards = document.querySelectorAll(".ciphered-card");
+    let maxHeight = 0;
+
+    if (window.innerWidth < 768) {
+      maxHeight = Math.max(
+        ...Array.from(cards).map((card) => card.getBoundingClientRect().height),
+      );
+    } else {
+      const cipheredGrid = document.getElementById("ciphered-grid");
+
+      if (cipheredGrid) {
+        const { height } = cipheredGrid.getBoundingClientRect();
+        maxHeight = height;
+      }
     }
+
+    cards.forEach((card) => {
+      // @ts-ignore
+      card.style.height = `${maxHeight}px`;
+    });
   }, [cardTexts]);
 
   return (
@@ -71,7 +82,7 @@ function App() {
 
           <div className="flex flex-col gap-4 px-8">
             <div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-max gap-8 "
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-min md:h-max gap-8 "
               id="ciphered-grid"
             >
               {cardTexts &&
