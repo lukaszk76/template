@@ -2,7 +2,7 @@ import React, { memo, useLayoutEffect, useContext } from "react";
 import { ThreeAnimation } from "@/components/ThreeAnimationPipes/ThreeAnimation";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/lib/useTranslations";
-import { Icons } from "./icons";
+import { Icons } from "@/components/ui/icons";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { AppContext } from "@/AppContext";

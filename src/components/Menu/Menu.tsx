@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { LanguageSelector } from "@/components/Menu/LanguageSelector";
 import { buttonVariants } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/ui/icons";
 
 export const Menu = memo(() => {
   return (

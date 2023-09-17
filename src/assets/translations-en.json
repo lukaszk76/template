@@ -25,5 +25,9 @@
   "contact_success_message": "Thank you for your message! I will get back to you as soon as possible.",
   "contact_error_message": "Something went wrong. Please try again later.",
   "contact_success_message_title": "Success!",
-  "contact_error_message_title": "Error!"
+  "contact_error_message_title": "Error!",
+  "error_name": "Name should have 2-50 characters",
+  "error_email": "Invalid email address",
+  "error_message": "Message should have 10-500 characters",
+  "error_phone": "Invalid phone number"
 }

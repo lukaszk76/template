@@ -1,5 +1,6 @@
 import React, { memo, useLayoutEffect } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 const logos = [
   { image: "/react.png", name: "React" },
@@ -17,15 +18,36 @@ const logos = [
 
 export const Logos = memo(() => {
   useLayoutEffect(() => {
-    gsap.from(".technology", { duration: 0.3, yPercent: 200, stagger: -0.1 });
+    gsap.registerPlugin(ScrollTrigger);
+    const logos = gsap.utils.toArray(".technology");
+    gsap.from(logos, {
+      scrollTrigger: {
+        trigger: ".technology",
+        start: "top 90%",
+        end: "top 85%",
+        scrub: 1,
+      },
+      stagger: 0.3,
+      ease: "power2.out",
+      yPercent: 100,
+      opacity: 0,
+      blur: 10,
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
   }, []);
 
   return (
     <div className="grid grid-cols-4 gap-8 md:gap-0 md:flex w-full justify-between pt-4 pb-8 px-4">
       {logos.map((logo) => (
-        <div key={logo.image} className="flex flex-col gap-2 items-center ">
+        <div
+          key={logo.image}
+          className="flex flex-col gap-2 items-center technology"
+        >
           <div
-            className={`w-6 h-6 rounded shadow-lg bg-card flex justify-center items-center backdrop-blur-lg bg-card technology`}
+            className={`w-6 h-6 rounded shadow-lg bg-card flex justify-center items-center backdrop-blur-lg bg-card `}
           >
             <img src={logo.image} alt="logo" className="w-4" />
           </div>

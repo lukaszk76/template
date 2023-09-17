@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/ui/icons";
 import { useTranslations } from "@/lib/useTranslations";
 
 export const Footer = memo(() => {

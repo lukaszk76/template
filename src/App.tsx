@@ -1,7 +1,7 @@
 import "../app/globals.css";
 import "./app.css";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Hero } from "@/components/Hero";
+import { Hero } from "@/components/Hero/Hero";
 // @ts-ignore
 import { addAnimatedCursor } from "./components/animatedCursor.js";
 import { Ciphered } from "@/components/CipheredText/Ciphered";
@@ -9,7 +9,6 @@ import { Logos } from "@/components/Logos/Logos";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "@/lib/useTranslations";
 import { Menu } from "@/components/Menu/Menu";
-import { Lines } from "@/components/Lines/Lines";
 import { Footer } from "@/components/Footer/Footer";
 import { setMetaDescription, setMetaTitle, setHtmlLang } from "@/lib/utils";
 import { ContactForm } from "@/components/ContactForm/ContactForm";
@@ -86,7 +85,6 @@ function App() {
   return (
     <AppContextProvider>
       <div className="w-screen h-max min-h-screen ">
-        <Lines />
         <div className="cursor"></div>
         <div className="cursor-pointer"></div>
         <Menu />

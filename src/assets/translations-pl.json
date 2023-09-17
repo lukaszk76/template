@@ -25,5 +25,9 @@
   "contact_success_message": "Dziękuję za wiadomość! Odezwę się do Ciebie najszybciej jak to możliwe.",
   "contact_error_message": "Ups! Coś poszło nie tak. Spróbuj ponownie później.",
   "contact_success_message_title": "Wiadomość wysłana!",
-  "contact_error_message_title": "Błąd!"
+  "contact_error_message_title": "Błąd!",
+  "error_name": "Imię powinno mieć od 2 do 50 znakow",
+  "error_email": "Niepoprawny adres email",
+  "error_message": "Wiadomość powinna mieć od 10 do 500 znaków",
+  "error_phone": "Niepoprawny numer telefonu"
 }

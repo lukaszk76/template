@@ -1,4 +1,10 @@
-import React, { memo, useContext, useEffect, useLayoutEffect } from "react";
+import React, {
+  memo,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+} from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -26,24 +32,41 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useTranslations } from "@/lib/useTranslations";
 import emailjs from "@emailjs/browser";
-import { Icons } from "../icons";
+import { Icons } from "@/components/ui/icons";
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
 // @ts-ignore
 import { addAnimatedCursor } from "@/components/animatedCursor.js";
-
-const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  email: z.string().email(),
-  phone: z.string().min(9).max(15),
-  message: z.string().min(10).max(500),
-});
+import { Loader } from "@/components/Loader/Loader";
 
 export const ContactForm = memo(() => {
   const { isContactFormOpen, setIsContactFormOpen } = useContext(AppContext);
+  const [isLoading, setIsLoading] = React.useState(false);
   const { getTranslation } = useTranslations();
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        username: z
+          .string()
+          .min(2, { message: getTranslation("error_name") })
+          .max(50, { message: getTranslation("error_name") }),
+        email: z.string().email({ message: getTranslation("error_email") }),
+        phone: z
+          .string()
+          .min(9, { message: getTranslation("error_phone") })
+          .max(15, { message: getTranslation("error_phone") })
+          .or(z.string().length(0)),
+        message: z
+          .string()
+          .min(10, { message: getTranslation("error_message") })
+          .max(500, { message: getTranslation("error_message") }),
+      }),
+    [],
+  );
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,6 +108,7 @@ export const ContactForm = memo(() => {
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     const templateParams = {
       from_name: values.username,
       reply_to: values.email,
@@ -106,8 +130,24 @@ export const ContactForm = memo(() => {
         function () {
           displayErrorMessage();
         },
-      );
+      )
+      .then(() => {
+        clearForm();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
+
+  function clearForm() {
+    form.reset({
+      username: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+  }
+
   return (
     <>
       {isSuccess && (
@@ -248,14 +288,14 @@ export const ContactForm = memo(() => {
                   style={{ cursor: "none" }}
                   className="w-full md:col-start-3 CollapsibleContent"
                 >
-                  {getTranslation("contact_send")}
+                  {isLoading ? <Loader /> : getTranslation("contact_send")}
                 </Button>
               </div>
-              <Separator className="mt-4 w-full" />
             </form>
           </Form>
         </CollapsibleContent>
       </Collapsible>
+      <Separator className="mt-4 w-full" />
     </>
   );
 });
