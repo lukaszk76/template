@@ -10,5 +10,20 @@
   "copy": "Twoja przepustka do perfekcyjnego frontendu!",
   "contact": "Porozmawiajmy!",
   "meta_description": "CodeDev: Wyższy poziom frontendu - jestem ekspertem w oszałamiających projektach stron i indywidualnych animacjach. Wykorzystaj moc React, JavaScript, TypeScript Three.js, Next.js i gsap!",
-  "meta_title": "CodeDev: Wyższy poziom frontendu"
+  "meta_title": "CodeDev: Wyższy poziom frontendu",
+  "address": "ul.Jana Matejki 9, 32-070 Przeginia Narodowa",
+  "contact_welcome": "Porozmawiajmy!",
+  "contact_username": "Imię",
+  "contact_email": "Email",
+  "contact_message": "Wiadomość",
+  "contact_phone": "Telefon",
+  "contact_send": "Wyślij",
+  "contact_username_description": "Jak mam się do Ciebie zwracać?",
+  "contact_email_description": "Podaj swój mail",
+  "contact_message_description": "Napisz o czym chcesz porozmawiać",
+  "contact_phone_description": "A jeśli wolisz rozmawiać, zostaw swój numer",
+  "contact_success_message": "Dziękuję za wiadomość! Odezwę się do Ciebie najszybciej jak to możliwe.",
+  "contact_error_message": "Ups! Coś poszło nie tak. Spróbuj ponownie później.",
+  "contact_success_message_title": "Wiadomość wysłana!",
+  "contact_error_message_title": "Błąd!"
 }

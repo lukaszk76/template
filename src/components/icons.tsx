@@ -6,15 +6,23 @@ import {
   Phone,
   Mail,
   Hash,
+  Smile,
+  Frown,
+  ChevronsDownUp,
+  ChevronsUpDown,
 } from "lucide-react";
 
 export const Icons = {
+  expand: ChevronsUpDown,
+  collapse: ChevronsDownUp,
   home: Home,
   phone: Phone,
   linkedin: Linkedin,
   mail: Mail,
   github: Github,
   hash: Hash,
+  smile: Smile,
+  frown: Frown,
   logo: (props: LucideProps) => (
     <svg viewBox="0 0 555 640" {...props}>
       <path

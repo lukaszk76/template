@@ -48,8 +48,8 @@ const addCursorCircle = () => {
         width: 40,
         height: 40,
         radius: "50%",
-        shadow1: "10px",
-        shadow2: "2px",
+        shadow1: "3px",
+        shadow2: "1px",
         shadowColor: "#F7544D",
       };
 
@@ -64,8 +64,8 @@ const addCursorCircle = () => {
         computedState.width = width;
         computedState.height = height;
         computedState.radius = radius;
-        computedState.shadow1 = "20px";
-        computedState.shadow2 = "5px";
+        computedState.shadow1 = "5px";
+        computedState.shadow2 = "2px";
         computedState.shadowColor = "#F7544D";
       }
 
@@ -87,10 +87,12 @@ const addCursorCircle = () => {
       timeout = setTimeout(mouseStopped, 5000);
     });
 
-    document.querySelectorAll("a, button, .selectable").forEach((elem) => {
-      elem.addEventListener("mouseenter", () => (onElement = elem));
-      elem.addEventListener("mouseleave", () => (onElement = null));
-    });
+    document
+      .querySelectorAll("a, button, input, textarea, .selectable")
+      .forEach((elem) => {
+        elem.addEventListener("mouseenter", () => (onElement = elem));
+        elem.addEventListener("mouseleave", () => (onElement = null));
+      });
   });
 };
 

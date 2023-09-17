@@ -1,6 +1,6 @@
 import "../app/globals.css";
 import "./app.css";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Hero } from "@/components/Hero";
 // @ts-ignore
 import { addAnimatedCursor } from "./components/animatedCursor.js";
@@ -12,6 +12,8 @@ import { Menu } from "@/components/Menu/Menu";
 import { Lines } from "@/components/Lines/Lines";
 import { Footer } from "@/components/Footer/Footer";
 import { setMetaDescription, setMetaTitle, setHtmlLang } from "@/lib/utils";
+import { ContactForm } from "@/components/ContactForm/ContactForm";
+import { AppContextProvider } from "@/AppContext";
 
 export interface TextI {
   title: string;
@@ -22,7 +24,7 @@ function App() {
     addAnimatedCursor();
   }, []);
 
-  const [cardTexts, setCardTexts] = React.useState<TextI[]>();
+  const [cardTexts, setCardTexts] = useState<TextI[]>();
 
   const { getTranslation, language } = useTranslations();
 
@@ -82,33 +84,35 @@ function App() {
   }, [cardTexts]);
 
   return (
-    <div className="w-screen h-max min-h-screen ">
-      <Lines />
-      <div className="cursor"></div>
-      <div className="cursor-pointer"></div>
-      <Menu />
-      <div className="w-screen bg-card flex flex-col items-center h-full min-h-screen pt-[7vh]">
-        <div className="flex w-full h-full min-h-screen max-w-[1200px] flex-col items-start gap-8 bg-background z-[1]">
-          <Hero />
+    <AppContextProvider>
+      <div className="w-screen h-max min-h-screen ">
+        <Lines />
+        <div className="cursor"></div>
+        <div className="cursor-pointer"></div>
+        <Menu />
+        <div className="w-screen bg-card flex flex-col items-center h-full min-h-screen pt-[7vh]">
+          <div className="flex w-full h-full min-h-screen max-w-[1200px] flex-col items-start gap-8 bg-background z-[1]">
+            <Hero />
 
-          <div className="flex flex-col gap-4 px-8">
-            <div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-min md:h-max gap-8 "
-              id="ciphered-grid"
-            >
-              {cardTexts &&
-                cardTexts.map((text, index) => (
-                  <Ciphered text={text} key={index} />
-                ))}
+            <div className="flex flex-col gap-4 px-8">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full h-min md:h-max gap-8 "
+                id="ciphered-grid"
+              >
+                {cardTexts &&
+                  cardTexts.map((text, index) => (
+                    <Ciphered text={text} key={index} />
+                  ))}
+              </div>
+              <Separator className="mx-4 mt-4 w-full" />
+              <ContactForm />
+              <Logos />
             </div>
-            <Separator className="mx-4 w-full" />
-
-            <Logos />
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </AppContextProvider>
   );
 }
 

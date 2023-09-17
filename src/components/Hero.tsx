@@ -1,10 +1,54 @@
-import React, { memo } from "react";
+import React, { memo, useLayoutEffect, useContext } from "react";
 import { ThreeAnimation } from "@/components/ThreeAnimationPipes/ThreeAnimation";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/lib/useTranslations";
 import { Icons } from "./icons";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { AppContext } from "@/AppContext";
+
 export const Hero = memo(() => {
   const { getTranslation } = useTranslations();
+  const { setIsContactFormOpen } = useContext(AppContext);
+
+  useLayoutEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to("#rounded-hero", {
+      scrollTrigger: {
+        trigger: "#rounded-hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+      },
+      y: "-100vh",
+      ease: "power2.inOut",
+    });
+
+    gsap.from("#rounded-hero", {
+      opacity: 0.0,
+      duration: 2,
+      delay: 0.5,
+      ease: "power2.inOut",
+    });
+
+    gsap.to("#main-webgl-background", {
+      scrollTrigger: {
+        trigger: "#main-webgl-background",
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+      },
+      opacity: 0,
+      ease: "power2.inOut",
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => {
+        trigger.kill();
+      });
+    };
+  }, []);
+
   return (
     <div className="relative w-full h-full">
       <ThreeAnimation
@@ -18,6 +62,7 @@ export const Hero = memo(() => {
           pointerEvents: "none",
         }}
         className="z-20 rounded-full absolute flex flex-col w-full h-full md:w-1/2 justify-around md:justify-center gap-4 md:gap-12 px-12 py-12 -translate-y-[50vh]"
+        id="rounded-hero"
       >
         <div
           className="w-full h-max flex gap-4 items-center text-primary"
@@ -33,6 +78,7 @@ export const Hero = memo(() => {
         <Button
           className="w-full md:w-1/2"
           style={{ cursor: "none", pointerEvents: "auto" }}
+          onClick={() => setIsContactFormOpen(true)}
         >
           {getTranslation("contact")}
         </Button>

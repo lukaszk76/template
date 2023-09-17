@@ -10,5 +10,20 @@
   "copy": "Your Gateway to Frontend Excellence!",
   "contact": "Contact me",
   "meta_description": "CodeDev: Elevating Frontend Excellence - Your Go-To for Stunning Web Design & Custom Animations. Unleash the Power of React, JavaScript, Three.js, and gsap with Us!",
-  "meta_title": "CodeDev: Elevating Frontend Excellence"
+  "meta_title": "CodeDev: Elevating Frontend Excellence",
+  "address": "ul.Jana Matejki 9, 32-070 Przeginia Narodowa, Poland",
+  "contact_welcome": "Let's talk!",
+  "contact_username": "Name",
+  "contact_email": "Email",
+  "contact_message": "Message",
+  "contact_send": "Send",
+  "contact_phone": "Phone",
+  "contact_username_description": "How should I call you?",
+  "contact_email_description": "Please provide your email address",
+  "contact_message_description": "What would you like to talk about?",
+  "contact_phone_description": "If you prefer to talk, please provide your phone number",
+  "contact_success_message": "Thank you for your message! I will get back to you as soon as possible.",
+  "contact_error_message": "Something went wrong. Please try again later.",
+  "contact_success_message_title": "Success!",
+  "contact_error_message_title": "Error!"
 }

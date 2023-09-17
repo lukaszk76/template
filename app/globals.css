@@ -19,8 +19,8 @@
     --popover: 224 71% 4%;
     --popover-foreground: 215 20.2% 65.1%;
 
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
+    --border: 201 17% 14%;
+    --input: 201 17% 14%;
 
     --card: 204 17% 1.5%;
     --card-foreground: 213 31% 91%;
@@ -28,13 +28,13 @@
     --primary: 220 7% 92%;
     --primary-foreground: 222.2 47.4% 1.2%;
 
-    --secondary: 222.2 47.4% 11.2%;
+    --secondary: 201 17% 14%;
     --secondary-foreground: 218deg 8% 75%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --ring: 216 34% 17%;
+    --ring: 201 17% 14%;
 
     --radius: 0.35rem;
   }
@@ -114,4 +114,29 @@ html:not(html:hover) .cursor::after {
   transform: translate(-50%, -50%);
   transition: opacity 0.3s ease-in-out;
   display: none;
+}
+
+.CollapsibleContent[data-state='open'] {
+  animation: slideDown 300ms ease-out;
+}
+.CollapsibleContent[data-state='closed'] {
+  animation: slideUp 300ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
 }
