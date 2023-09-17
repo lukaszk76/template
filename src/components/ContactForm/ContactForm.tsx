@@ -134,6 +134,10 @@ export const ContactForm = memo(() => {
       .then(() => {
         clearForm();
       })
+      .catch(function (error) {
+        console.error("FAILED...", error);
+        displayErrorMessage();
+      })
       .finally(() => {
         setIsLoading(false);
       });
