@@ -56,7 +56,7 @@ export const LanguageSelector = memo(() => {
           style={{ cursor: "none" }}
         >
           <img
-            src="https://res.cloudinary.com/dcxdoz9bz/image/upload/q_auto/w_auto/v1695065830/code-dev/poland_baftcs.png"
+            src="/poland.png"
             width={50}
             height={20}
             alt="flag of Poland"
@@ -69,7 +69,7 @@ export const LanguageSelector = memo(() => {
           style={{ cursor: "none" }}
         >
           <img
-            src="https://res.cloudinary.com/dcxdoz9bz/image/upload/q_auto/w_auto/v1695065831/code-dev/england_bt9zqz.png"
+            src="/england.png"
             alt="flag of United Kingdom"
             className="mr-2 w-6 h-4 border-[1px] border-gray-300"
           />

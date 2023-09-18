@@ -2,21 +2,18 @@ import React, { memo, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
-const cloudinary =
-  "https://res.cloudinary.com/dcxdoz9bz/image/upload/q_auto/w_auto/v1695063321/code-dev/";
-
 const logos = [
-  { image: "react_jk1lhd", name: "React" },
-  {
-    image: "Typescript_q0gyjj",
-    name: "Typescript",
-  },
-  { image: "js_reguvi", name: "Javascript" },
-  { image: "nextjs_n1d3mt", name: "Next.js" },
-  { image: "tailwindcss_aqedjn", name: "TailwindCSS" },
-  { image: "three_gwdpf4", name: "Three.js" },
-  { image: "gsap_uc4vso", name: "GSAP" },
-  { image: "google_cnycqi", name: "Google" },
+  { image: "/react.png", name: "React" },
+  { image: "/Typescript.png", name: "Typescript" },
+
+  { image: "/js.png", name: "Javascript" },
+  { image: "/nextjs.png", name: "Next.js" },
+
+  { image: "/tailwindcss.svg", name: "TailwindCSS" },
+  { image: "/three.png", name: "Three.js" },
+
+  { image: "/gsap.png", name: "GSAP" },
+  { image: "/google.png", name: "Google" },
 ];
 
 export const Logos = memo(() => {
@@ -52,7 +49,7 @@ export const Logos = memo(() => {
           <div
             className={`w-6 h-6 rounded shadow-lg bg-card flex justify-center items-center backdrop-blur-lg bg-card `}
           >
-            <img src={cloudinary + logo.image} alt="logo" className="h-4" />
+            <img src={logo.image} alt="logo" className="w-4" />
           </div>
           <span className="text-xs text-muted-foreground">{logo.name}</span>
         </div>
