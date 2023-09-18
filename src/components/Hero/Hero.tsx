@@ -69,7 +69,6 @@ export const Hero = memo(() => {
           style={{ pointerEvents: "none" }}
         >
           <Icons.logo className="w-1/12" />
-          {/*<Logo />*/}
           <h1 className="text-4xl font-bold">CodeDev</h1>
         </div>
         <h2 className="text-2xl font-bold text-primary">

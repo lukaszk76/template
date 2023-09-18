@@ -12,7 +12,7 @@ import {
   WebGLRenderer,
 } from "three";
 
-import normals from "/sphere_normal.png";
+import normals from "/sphere_normal.jpg";
 import dots from "/dust.jpeg";
 import stripes from "/stripes.jpeg";
 import noise from "/noise1.jpg";
@@ -119,10 +119,10 @@ export class AnimationEngine {
       new THREE.Vector3(2, -1, 0),
       new THREE.Vector3(-1, -2, 0),
       0.2,
-      new THREE.Vector3(0.913, 0.237, 0.256),
       new THREE.Vector3(0.482, 0.491, 0.422),
       new THREE.Vector3(0.913, 0.237, 0.256),
       new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
     );
 
     this.pointsMesh2 = pointsMesh2;
@@ -134,8 +134,8 @@ export class AnimationEngine {
       0.05,
       new THREE.Vector3(0.482, 0.491, 0.422),
       new THREE.Vector3(0.913, 0.237, 0.256),
-      new THREE.Vector3(0.913, 0.237, 0.256),
       new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
     );
 
     this.pointsMesh3 = pointsMesh3;
@@ -145,8 +145,8 @@ export class AnimationEngine {
       new THREE.Vector3(1, 1.5, 0),
       new THREE.Vector3(-2, -1, -1),
       0.03,
-      new THREE.Vector3(0.913, 0.237, 0.256),
       new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
       new THREE.Vector3(0.482, 0.491, 0.422),
       new THREE.Vector3(0.913, 0.237, 0.256),
     );
@@ -160,8 +160,8 @@ export class AnimationEngine {
       0.02,
       new THREE.Vector3(0.482, 0.491, 0.422),
       new THREE.Vector3(0.913, 0.237, 0.256),
-      new THREE.Vector3(0.913, 0.237, 0.256),
       new THREE.Vector3(0.482, 0.491, 0.422),
+      new THREE.Vector3(0.913, 0.237, 0.256),
     );
 
     this.pointsMesh5 = pointsMesh5;
