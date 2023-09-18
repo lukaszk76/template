@@ -29,5 +29,6 @@
   "error_name": "Imię powinno mieć od 2 do 50 znakow",
   "error_email": "Niepoprawny adres email",
   "error_message": "Wiadomość powinna mieć od 10 do 500 znaków",
-  "error_phone": "Niepoprawny numer telefonu"
+  "error_phone": "Niepoprawny numer telefonu",
+  "expand_button": "Rozwiń / Zwiń"
 }

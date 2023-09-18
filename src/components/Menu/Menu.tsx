@@ -13,6 +13,7 @@ export const Menu = memo(() => {
             href="https://www.linkedin.com/in/%C5%82ukasz-kaczmarek-849a1b81/"
             target="_blank"
             rel="noreferrer"
+            aria-label="LinkedIn"
           >
             <div
               className={buttonVariants({
@@ -28,6 +29,7 @@ export const Menu = memo(() => {
             href="https://github.com/lukaszk76"
             target="_blank"
             rel="noreferrer"
+            aria-label="GitHub"
           >
             <div
               className={buttonVariants({

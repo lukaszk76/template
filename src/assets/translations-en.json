@@ -29,5 +29,6 @@
   "error_name": "Name should have 2-50 characters",
   "error_email": "Invalid email address",
   "error_message": "Message should have 10-500 characters",
-  "error_phone": "Invalid phone number"
+  "error_phone": "Invalid phone number",
+  "expand_button": "Expand / Collapse"
 }

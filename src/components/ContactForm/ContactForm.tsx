@@ -191,7 +191,12 @@ export const ContactForm = memo(() => {
             {getTranslation("contact_welcome")}
           </h3>
           <CollapsibleTrigger>
-            <Button size="icon" variant="ghost" style={{ cursor: "none" }}>
+            <Button
+              size="icon"
+              variant="ghost"
+              style={{ cursor: "none" }}
+              aria-label={getTranslation("expand_button")}
+            >
               {isContactFormOpen ? <Icons.collapse /> : <Icons.expand />}
             </Button>
           </CollapsibleTrigger>
