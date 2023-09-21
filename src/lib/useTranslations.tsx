@@ -1,5 +1,5 @@
-import pl from "../assets/translations-pl.json";
-import en from "../assets/translations-en.json";
+import pl from "../assets/translations/translations-pl.json";
+import en from "../assets/translations/translations-en.json";
 import React, { useCallback, useEffect, useState } from "react";
 
 export type Translation = {

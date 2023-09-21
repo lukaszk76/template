@@ -2,6 +2,7 @@ import React, { memo } from "react";
 import { LanguageSelector } from "@/components/Menu/LanguageSelector";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
+import { ThemeToggle } from "@/components/Menu/ThemeToggle";
 
 export const Menu = memo(() => {
   return (
@@ -41,6 +42,7 @@ export const Menu = memo(() => {
             </div>
           </a>
 
+          <ThemeToggle />
           <LanguageSelector />
         </div>
       </div>

@@ -1,7 +1,11 @@
 // @ts-ignore
 import { addAnimatedCursor } from "./components/AnimatedCursor/animatedCursor.js";
 
-import { setMetaDescription, setMetaTitle, setHtmlLang } from "@/lib/utils";
+import {
+  setMetaDescription,
+  setMetaTitle,
+  setHtmlLang,
+} from "@/lib/metaTagsSetters";
 
 import { AppContextProvider } from "@/AppContext";
 import { useEffect, useRef } from "react";
@@ -9,6 +13,7 @@ import { useTranslations } from "@/lib/useTranslations";
 import { ReactLenis } from "@studio-freight/react-lenis";
 import { Layout } from "@/components/Layout/Layout";
 import { gsap } from "gsap";
+import { ThemeProvider } from "next-themes";
 
 export interface TextI {
   title: string;
@@ -41,11 +46,13 @@ function App() {
   }, [getTranslation, language, setMetaDescription, setMetaTitle, setHtmlLang]);
 
   return (
-    <AppContextProvider>
-      <ReactLenis ref={lenisRef} autoRaf={false}>
-        <Layout />
-      </ReactLenis>
-    </AppContextProvider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <AppContextProvider>
+        <ReactLenis ref={lenisRef} autoRaf={false}>
+          <Layout />
+        </ReactLenis>
+      </AppContextProvider>
+    </ThemeProvider>
   );
 }
 
