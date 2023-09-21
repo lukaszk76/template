@@ -1,17 +1,49 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-
   :root {
-    --background: 204 17% 8%;
-    --foreground: 55 15% 86%;
+    cursor: none;
 
-    --muted: 204 17% 14%;
-    --muted-foreground: 218deg 8% 65%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
 
     --accent: 216 34% 17%;
     --accent-foreground: 210 40% 98%;
@@ -19,24 +51,24 @@
     --popover: 224 71% 4%;
     --popover-foreground: 215 20.2% 65.1%;
 
-    --border: 201 17% 14%;
-    --input: 201 17% 14%;
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
 
-    --card: 204 17% 1.5%;
+    --card: 224 71% 4%;
     --card-foreground: 213 31% 91%;
 
-    --primary: 220 7% 92%;
+    --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 1.2%;
 
-    --secondary: 201 17% 14%;
-    --secondary-foreground: 218deg 8% 75%;
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --ring: 201 17% 14%;
+    --ring: 216 34% 17%;
 
-    --radius: 0.35rem;
+    --radius: 0.5rem;
   }
 }
 
@@ -47,100 +79,5 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    cursor: none;
-    font-family: 'Lato', sans-serif;
-  }
-}
-
-.cursor {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: var(--width);
-  height: var(--height);
-  transform: translate(calc(var(--x) - var(--width) / 2), calc(var(--y) - var(--height) / 2));
-  transition: 150ms width cubic-bezier(0.39, 0.575, 0.565, 1),
-  150ms height cubic-bezier(0.39, 0.575, 0.565, 1),
-  150ms transform cubic-bezier(0.39, 0.575, 0.565, 1),
-  opacity 0.3s ease-in-out;
-  z-index: 100;
-  pointer-events: none;
-  will-change: transform;
-}
-
-@media (pointer: fine) {
-  .cursor {
-    display: block;
-  }
-}
-
-.cursor::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: var(--radius);
-  opacity: var(--scale);
-  --webkit-transform: scale(var(--scale));
-  transform: scale(var(--scale));
-  box-shadow: 0 0 var(--shadow1) var(--shadow2) var(--shadowColor);
-  transition: 300ms opacity cubic-bezier(0.39, 0.575, 0.565, 1),
-  300ms box-shadow cubic-bezier(0.39, 0.575, 0.565, 1),
-  300ms transform cubic-bezier(0.39, 0.575, 0.565, 1),
-  150ms border-radius cubic-bezier(0.39, 0.575, 0.565, 1);
-}
-
-html:not(html:hover) .cursor::after {
-  opacity: 0;
-  transform: scale(0);
-}
-
-.cursor-pointer{
-  z-index: 999;
-  position: fixed;
-  background: #F7544D;
-  opacity: 0.9;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  pointer-events: none;
-  box-shadow: 0 0 20px #F7544D,
-  0 0 60px #F7544D,
-  0 0 100px #F7544D;
-  animation: colors-pointer 5s infinite;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease-in-out;
-  display: none;
-}
-
-.CollapsibleContent[data-state='open'] {
-  animation: slideDown 300ms ease-out;
-}
-.CollapsibleContent[data-state='closed'] {
-  animation: slideUp 700ms ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    height: 0;
-    opacity: 0;
-  }
-  to {
-    height: var(--radix-collapsible-content-height);
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    height: var(--radix-collapsible-content-height);
-    opacity: 1;
-  }
-  to {
-    height: 0;
-    opacity: 0;
   }
 }

@@ -1,5 +1,18 @@
 import "./animatedCursor.css";
-const updateProperties = (elem, state) => {
+
+interface State {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  radius: string;
+  shadow1: string;
+  shadow2: string;
+  shadowColor: string;
+  scale: string;
+}
+
+const updateProperties = (elem: HTMLElement, state: State) => {
   elem.style.setProperty("--x", `${state.x}px`);
   elem.style.setProperty("--y", `${state.y}px`);
   elem.style.setProperty("--width", `${state.width}px`);
@@ -13,10 +26,14 @@ const updateProperties = (elem, state) => {
 };
 
 const addCursorPointer = () => {
-  const cursorPointer = document.querySelector(".cursor-pointer");
-  let timeout;
+  const cursorPointer = document.querySelector(
+    ".cursor-pointer",
+  ) as HTMLElement;
+  let timeout: NodeJS.Timeout;
   //follow cursor on mousemove
   document.addEventListener("mousemove", (e) => {
+    if (cursorPointer == null) return;
+
     let x = e.clientX;
     let y = e.clientY;
     cursorPointer.style.top = y + "px";
@@ -39,10 +56,14 @@ const addCursorPointer = () => {
 };
 
 const addCursorCircle = () => {
-  document.querySelectorAll(".cursor").forEach((cursor) => {
-    let onElement;
+  const cursors = document.querySelectorAll(
+    ".cursor",
+  ) as NodeListOf<HTMLDivElement>;
 
-    const createState = (e) => {
+  cursors.forEach((cursor) => {
+    let onElement: HTMLElement | null = null;
+
+    const createState = (e: MouseEvent) => {
       const defaultState = {
         x: e.clientX,
         y: e.clientY,
@@ -54,7 +75,7 @@ const addCursorCircle = () => {
         shadowColor: "hsl(var(--accent-foreground))",
       };
 
-      const computedState = {};
+      const computedState = {} as State;
 
       if (onElement != null) {
         const { top, left, width, height } = onElement.getBoundingClientRect();
@@ -76,7 +97,7 @@ const addCursorCircle = () => {
       };
     };
 
-    let timeout;
+    let timeout: NodeJS.Timeout;
     document.addEventListener("mousemove", (e) => {
       const state = createState(e);
       updateProperties(cursor, state);
@@ -88,12 +109,14 @@ const addCursorCircle = () => {
       timeout = setTimeout(mouseStopped, 5000);
     });
 
-    document
-      .querySelectorAll("a, button, input, textarea, .selectable")
-      .forEach((elem) => {
-        elem.addEventListener("mouseenter", () => (onElement = elem));
-        elem.addEventListener("mouseleave", () => (onElement = null));
-      });
+    const elements = document.querySelectorAll(
+      "a, button, input, textarea, .selectable",
+    ) as NodeListOf<HTMLElement>;
+
+    elements.forEach((elem) => {
+      elem.addEventListener("mouseenter", () => (onElement = elem));
+      elem.addEventListener("mouseleave", () => (onElement = null));
+    });
   });
 };
 

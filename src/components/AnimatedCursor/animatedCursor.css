@@ -1,0 +1,63 @@
+.cursor {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--width);
+  height: var(--height);
+  transform: translate(calc(var(--x) - var(--width) / 2), calc(var(--y) - var(--height) / 2));
+  transition: 150ms width cubic-bezier(0.39, 0.575, 0.565, 1),
+  150ms height cubic-bezier(0.39, 0.575, 0.565, 1),
+  150ms transform cubic-bezier(0.39, 0.575, 0.565, 1),
+  opacity 0.3s ease-in-out;
+  z-index: 100;
+  pointer-events: none;
+  will-change: transform;
+}
+
+@media (pointer: fine) {
+  .cursor {
+    display: block;
+  }
+}
+
+.cursor::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius);
+  opacity: var(--scale);
+  --webkit-transform: scale(var(--scale));
+  transform: scale(var(--scale));
+  box-shadow: 0 0 var(--shadow1) var(--shadow2) var(--shadowColor);
+  transition: 300ms opacity cubic-bezier(0.39, 0.575, 0.565, 1),
+  300ms box-shadow cubic-bezier(0.39, 0.575, 0.565, 1),
+  300ms transform cubic-bezier(0.39, 0.575, 0.565, 1),
+  150ms border-radius cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+html:not(html:hover) .cursor::after {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.cursor-pointer{
+  z-index: 999;
+  position: fixed;
+  background: hsl(var(--accent-foreground));
+  opacity: 0.9;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 20px hsl(var(--accent-foreground)),
+  0 0 60px hsl(var(--accent-foreground)),
+  0 0 100px hsl(var(--accent-foreground));
+  animation: colors-pointer 5s infinite;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease-in-out;
+  display: none;
+}
