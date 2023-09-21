@@ -1,3 +1,4 @@
+import "./animatedCursor.css";
 const updateProperties = (elem, state) => {
   elem.style.setProperty("--x", `${state.x}px`);
   elem.style.setProperty("--y", `${state.y}px`);
@@ -50,7 +51,7 @@ const addCursorCircle = () => {
         radius: "50%",
         shadow1: "3px",
         shadow2: "1px",
-        shadowColor: "#F7544D",
+        shadowColor: "hsl(var(--accent-foreground))",
       };
 
       const computedState = {};
@@ -66,7 +67,7 @@ const addCursorCircle = () => {
         computedState.radius = radius;
         computedState.shadow1 = "5px";
         computedState.shadow2 = "2px";
-        computedState.shadowColor = "#F7544D";
+        computedState.shadowColor = "hsl(var(--accent-foreground))";
       }
 
       return {
