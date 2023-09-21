@@ -34,4 +34,5 @@ It also provides custom hooks, functions and providers for:
 7. Adjust the webgl animation (if you need any animation) in ```src/components/ThreeAnimationPipes/ThreeAnimationPipes.tsx```.
 The main Three.js setup is in ```src/components/ThreeAnimationPipes/Three/AnimationEngine.ts```.
 Shaders can be found in ```src/components/ThreeAnimationPipes/Three/glsl```.
+The animation provided in the template is inspired by [movie](https://www.youtube.com/watch?v=0D-J_Lbxeeg&t=4s) of [Yuri Artiukh](https://www.youtube.com/@akella_).
 8. Adjust the cursor animation (if you need any) in ```src/components/AnimatedCursor/animatedCursor.ts```.
